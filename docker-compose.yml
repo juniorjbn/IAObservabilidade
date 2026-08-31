@@ -1,0 +1,123 @@
+# Stack completa da demo. Tudo local, nada sai da máquina — que é o mesmo
+# argumento usado para ambiente regulado.
+#
+# Orçamento de memória (Mac de 16GB, com Ollama rodando ao lado):
+#   lgtm 2G + postgres 256M + 4 processos Python ~600M  =  ~2,9G
+# O resto fica para o modelo, que é onde a memória faz falta.
+
+x-app-comum: &app-comum
+  build:
+    context: .
+    dockerfile: demo/Dockerfile
+  image: iaobservabilidade/demo:local
+  environment: &env-comum
+    DATABASE_URL: postgresql+psycopg2://demo:demo@postgres:5432/loja
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://lgtm:4318
+    OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    OTEL_SERVICE_NAMESPACE: loja
+    DEPLOY_ENV: demo
+  depends_on:
+    postgres:
+      condition: service_healthy
+  restart: unless-stopped
+  mem_limit: 200m
+
+services:
+  # Prometheus + Loki + Tempo + Pyroscope + Collector + Grafana, num container.
+  # Versão fixa de propósito: a demo não pode mudar de comportamento entre o
+  # ensaio e o palco porque uma tag flutuante avançou.
+  lgtm:
+    image: grafana/otel-lgtm:0.32.0
+    container_name: lgtm
+    ports:
+      - "3000:3000"   # Grafana
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    mem_limit: 2g
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: loja
+    # log_lock_waits deixa rastro das esperas de lock no log do Postgres.
+    # Útil no ensaio para confirmar que o incidente é o que a gente pensa.
+    command: >
+      postgres
+      -c max_connections=50
+      -c shared_buffers=64MB
+      -c log_lock_waits=on
+      -c deadlock_timeout=1s
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d loja"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    mem_limit: 256m
+    restart: unless-stopped
+
+  checkout-api:
+    <<: *app-comum
+    container_name: checkout-api
+    command: uvicorn demo.services.checkout_api:app --host 0.0.0.0 --port 8000
+    environment:
+      <<: *env-comum
+      OTEL_SERVICE_NAME: checkout-api
+      INVENTORY_URL: http://inventory-api:8000
+      POOL_SIZE: "5"
+      POOL_TIMEOUT_S: "2"
+    ports:
+      - "8001:8000"
+
+  inventory-api:
+    <<: *app-comum
+    container_name: inventory-api
+    command: uvicorn demo.services.inventory_api:app --host 0.0.0.0 --port 8000
+    environment:
+      <<: *env-comum
+      OTEL_SERVICE_NAME: inventory-api
+      POOL_SIZE: "5"
+      POOL_TIMEOUT_S: "2"
+    ports:
+      - "8002:8000"
+
+  # O culpado. Não recebe chamada de ninguém, não aparece em trace nenhum
+  # do caminho da requisição, e fala com o mesmo Postgres.
+  reconciliation-worker:
+    <<: *app-comum
+    container_name: reconciliation-worker
+    command: uvicorn demo.services.reconciliation_worker:app --host 0.0.0.0 --port 8000
+    environment:
+      <<: *env-comum
+      OTEL_SERVICE_NAME: reconciliation-worker
+      POOL_SIZE: "2"
+      POOL_TIMEOUT_S: "5"
+      HOLD_SECONDS: "20"
+    ports:
+      - "8003:8000"
+
+  loadgen:
+    <<: *app-comum
+    container_name: loadgen
+    command: python -m demo.services.loadgen
+    environment:
+      <<: *env-comum
+      OTEL_SERVICE_NAME: loadgen
+      CHECKOUT_URL: http://checkout-api:8000
+      RPS: "8"
+      CONCORRENCIA: "8"
+    depends_on:
+      postgres:
+        condition: service_healthy
