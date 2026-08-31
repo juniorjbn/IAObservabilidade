@@ -46,8 +46,11 @@ make agente                # rodada 1: investiga SEM contexto de ambiente
 make agente-r2             # rodada 2: injeta contexto/*.md no system prompt
 ```
 
-O agente expõe ao modelo só 5 ferramentas de leitura do MCP do Grafana e
-para em um portão humano antes de cada chamada (Enter aprova, `n` nega).
+O agente conecta em dois servidores MCP, ambos somente leitura — o do
+Grafana (métricas e logs, com `-disable-write`) e o nativo do Tempo (traces
+via TraceQL, habilitado por `lgtm/tempo-config.yaml`) — e expõe ao modelo só
+5 ferramentas: datasources, métrica, log, busca de traces e trace por ID.
+Antes de cada chamada, para num portão humano (Enter aprova, `n` nega).
 `--sim` aprova tudo, para ensaio; `--pergunta` muda a pergunta.
 
 ## A topologia, e por que ela é assim

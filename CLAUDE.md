@@ -57,19 +57,25 @@ As quatro coisas, combinadas:
 
 Notas da etapa 2 (31/08/2026, testado nesta máquina):
 
-- O mcp-grafana 1.3.0 (instalado via brew) **não tem tools de Tempo/traces**.
-  As 5 tools expostas: list_datasources, list_prometheus_metric_names,
-  query_prometheus, query_loki_logs, list_loki_label_values. O filtro é em
-  duas camadas: `-enabled-tools datasource,prometheus,loki` no servidor +
-  allowlist no host. Se a narrativa da palestra menciona "seguir o trace via
-  MCP", precisa ser ajustada — traces ficam visíveis só no Grafana, não nas
-  tools do agente.
+- Traces resolvidos (31/08, tarde): o agente fala com **dois servidores
+  MCP** — mcp-grafana (`-disable-write`, categorias datasource/prometheus/
+  loki) e o **MCP nativo do Tempo 3.x** (streamable HTTP em
+  `localhost:3200/api/mcp`, ligado por `lgtm/tempo-config.yaml` montado no
+  container). As 5 tools expostas: list_datasources, query_prometheus,
+  query_loki_logs, traceql-search, get-trace. A narrativa "seguir o trace
+  via MCP" está de pé. O filtro segue em duas camadas: categorias no
+  mcp-grafana + allowlist no host.
 - Latência do qwen3:8b (think=False): 1,6–3,1s por passo quente; ~25s no
   primeiro passo frio (carga do modelo). **Pré-aquecer o modelo antes do
   palco.** Investigação de 5 passos: ~17s de tempo de modelo.
 - Tropeços observados do qwen3:8b (insumo da etapa 3): escreve LogQL inválido
   (`{service_name} |= "error"` sem valor no label), repete a mesma chamada
-  errada, e desiste explicando o erro de sintaxe em vez de corrigi-lo.
+  errada, e desiste explicando o erro de sintaxe em vez de corrigi-lo. Em
+  TraceQL, esquece as chaves e as aspas (`service.name = checkout-api` em vez
+  de `{resource.service.name = "checkout-api"}`) e inventa `start=now-1h`,
+  que a API não aceita. Uma vez viu o diagnóstico final sair vazio. O Tempo
+  MCP serve a doc de TraceQL como tool (`docs-traceql`) — candidata a 6ª
+  ferramenta ou a virar material de contexto na rodada 2.
 
 A etapa 3 é a que ninguém planeja e onde mora o risco: o erro da rodada 1
 precisa ser reprodutível, senão a apresentação vira torcida.

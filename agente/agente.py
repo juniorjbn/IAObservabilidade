@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 """agente — o host MCP da palestra, em um arquivo.
 
-Liga duas pontas: o Ollama local (qwen3:8b) e o servidor MCP oficial do
-Grafana, SEMPRE com -disable-write. O loop é o clássico: o modelo pede uma
-ferramenta, o humano aprova no portão, o resultado volta cortado, repete até
-o diagnóstico.
+Liga o Ollama local (qwen3:8b) a DOIS servidores MCP, ambos somente leitura:
+
+- mcp-grafana com -disable-write → métricas (Prometheus) e logs (Loki)
+- o servidor MCP nativo do Tempo (/api/mcp) → traces via TraceQL
+
+O loop é o clássico: o modelo pede uma ferramenta, o humano aprova no portão,
+o resultado volta cortado, repete até o diagnóstico.
 
 Rodada 1: só este arquivo, 5 ferramentas genéricas, system prompt sem nenhuma
 dica do ambiente. Rodada 2 (--com-contexto): os arquivos de contexto/*.md
 entram no system prompt — e é só isso que muda. A diferença de resultado é a
 tese da palestra.
 
-NOTA sobre as 5 ferramentas: o mcp-grafana 1.3.0 NÃO tem tools de Tempo
-(traces). As duas vagas prometidas a traces foram para as ferramentas de
-descoberta (list_prometheus_metric_names, list_loki_label_values), que é o
-que um investigador real usa primeiro. O servidor sobe só com as categorias
-datasource/prometheus/loki e o host ainda filtra pela lista FERRAMENTAS —
+As 5 ferramentas: uma de descoberta (list_datasources), métrica, log, busca
+de traces e trace por ID. O mcp-grafana ainda sobe só com as categorias
+datasource/prometheus/loki, e o host filtra tudo pela lista FERRAMENTAS —
 expor pouco é decisão de interface, e a interface é o contexto.
 """
 
@@ -29,8 +30,10 @@ import time
 import requests
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from mcp.client.streamable_http import streamable_http_client
 
 OLLAMA = "http://localhost:11434"
+TEMPO_MCP = "http://localhost:3200/api/mcp"
 MODELO = "qwen3:8b"
 LIMITE_SAIDA = 2000     # chars devolvidos ao modelo por ferramenta
 MAX_PASSOS = 8          # teto de iterações; no palco ninguém espera o passo 9
@@ -39,11 +42,11 @@ CINZA, VERDE, AMARELO, VERMELHO, NEGRITO, FIM = (
     "\033[90m", "\033[32m", "\033[33m", "\033[31m", "\033[1m", "\033[0m")
 
 FERRAMENTAS = [
-    "list_datasources",              # o que existe neste Grafana
-    "list_prometheus_metric_names",  # descoberta: quais métricas existem
-    "query_prometheus",              # a métrica em si
-    "query_loki_logs",               # os logs
-    "list_loki_label_values",        # descoberta: ex. quais service_name emitem log
+    "list_datasources",   # o que existe neste Grafana
+    "query_prometheus",   # métricas
+    "query_loki_logs",    # logs
+    "traceql-search",     # busca de traces (Tempo MCP)
+    "get-trace",          # um trace específico por ID (Tempo MCP)
 ]
 
 SERVIDOR_MCP = StdioServerParameters(
@@ -56,9 +59,10 @@ SERVIDOR_MCP = StdioServerParameters(
 
 PROMPT_BASE = (
     "Você é um agente de investigação de incidentes com acesso somente leitura "
-    "à observabilidade (Grafana: Prometheus e Loki). Investigue usando as "
-    "ferramentas antes de concluir. Responda em português, e termine com um "
-    "diagnóstico objetivo da causa raiz mais provável."
+    "à observabilidade: métricas (Prometheus), logs (Loki) e traces (Tempo, "
+    "via TraceQL). Investigue usando as ferramentas antes de concluir. "
+    "Responda em português, e termine com um diagnóstico objetivo da causa "
+    "raiz mais provável."
 )
 
 
@@ -116,10 +120,17 @@ async def investigar(pergunta: str, com_contexto: bool, auto: bool) -> None:
 
 
 async def _investigar(pergunta, com_contexto, auto, ralo) -> None:
-    async with stdio_client(SERVIDOR_MCP, errlog=ralo) as (leitura, escrita):
-        async with ClientSession(leitura, escrita) as sessao:
-            await sessao.initialize()
-            todas = (await sessao.list_tools()).tools
+    async with stdio_client(SERVIDOR_MCP, errlog=ralo) as (leitura, escrita), \
+            streamable_http_client(TEMPO_MCP) as fluxo_tempo:
+        async with ClientSession(leitura, escrita) as grafana, \
+                ClientSession(fluxo_tempo[0], fluxo_tempo[1]) as tempo:
+            await grafana.initialize()
+            await tempo.initialize()
+            todas, dona = [], {}
+            for sessao_mcp in (grafana, tempo):
+                for t in (await sessao_mcp.list_tools()).tools:
+                    todas.append(t)
+                    dona[t.name] = sessao_mcp
             expostas = [t for t in todas if t.name in FERRAMENTAS]
             tools_ollama = [{"type": "function", "function": {
                 "name": t.name, "description": t.description,
@@ -128,7 +139,7 @@ async def _investigar(pergunta, com_contexto, auto, ralo) -> None:
             rotulo = "COM contexto de ambiente" if com_contexto else "SEM contexto de ambiente"
             print(f"{NEGRITO}Agente de investigação — {rotulo}{FIM}")
             print(f"{CINZA}modelo {MODELO} · {len(expostas)} ferramentas expostas "
-                  f"(de {len(todas)} no servidor MCP, escrita desabilitada){FIM}")
+                  f"(de {len(todas)} nos 2 servidores MCP, escrita desabilitada){FIM}")
             for t in expostas:
                 print(f"{CINZA}  · {t.name}{FIM}")
 
@@ -165,7 +176,7 @@ async def _investigar(pergunta, com_contexto, auto, ralo) -> None:
                         print(f"{VERMELHO}✗ negado{FIM}")
                     else:
                         try:
-                            retorno = await sessao.call_tool(nome, args)
+                            retorno = await dona[nome].call_tool(nome, args)
                             resultado = "\n".join(
                                 c.text for c in retorno.content
                                 if getattr(c, "text", None)) or "(vazio)"
