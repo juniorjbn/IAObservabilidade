@@ -6,10 +6,10 @@ COMPOSE := docker compose
 
 .DEFAULT_GOAL := ajuda
 
-.PHONY: ajuda subir derrubar incidente curar estado verificar logs painel reiniciar
+.PHONY: ajuda subir derrubar incidente curar estado verificar logs painel reiniciar agente agente-r2
 
 ajuda:  ## Lista os comandos disponíveis
-	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) \
+	@grep -hE '^[a-z0-9-]+:.*?## ' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 subir:  ## Sobe a stack inteira (LGTM, Postgres, serviços, carga)
@@ -47,3 +47,9 @@ logs:  ## Acompanha os logs dos serviços da aplicação
 
 painel:  ## Abre o Grafana
 	@python3 -c "import webbrowser; webbrowser.open('http://localhost:3000')"
+
+agente:  ## Rodada 1: agente investiga SEM contexto de ambiente
+	agente/.venv/bin/python agente/agente.py
+
+agente-r2:  ## Rodada 2: agente investiga COM contexto de ambiente
+	agente/.venv/bin/python agente/agente.py --com-contexto

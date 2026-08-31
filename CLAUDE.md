@@ -49,11 +49,27 @@ As quatro coisas, combinadas:
 | # | Etapa | Situação |
 |---|---|---|
 | 1 | Demo reproduzível (stack + incidente) | **pronta, verificada** |
-| 2 | Agente Python: 5 tools, portão humano, corte de saída | a fazer |
+| 2 | Agente Python: 5 tools, portão humano, corte de saída | **pronta, testada com o modelo real** |
 | 3 | Calibração — o erro da rodada 1 tem que ser reprodutível | a fazer |
 | 4 | Camada de contexto e ferramentas de domínio | a fazer |
 | 5 | Roteiro de palco minutado | a fazer, só depois de medir o modelo |
 | 6 | Dossiê de referências verificadas | a fazer |
+
+Notas da etapa 2 (31/08/2026, testado nesta máquina):
+
+- O mcp-grafana 1.3.0 (instalado via brew) **não tem tools de Tempo/traces**.
+  As 5 tools expostas: list_datasources, list_prometheus_metric_names,
+  query_prometheus, query_loki_logs, list_loki_label_values. O filtro é em
+  duas camadas: `-enabled-tools datasource,prometheus,loki` no servidor +
+  allowlist no host. Se a narrativa da palestra menciona "seguir o trace via
+  MCP", precisa ser ajustada — traces ficam visíveis só no Grafana, não nas
+  tools do agente.
+- Latência do qwen3:8b (think=False): 1,6–3,1s por passo quente; ~25s no
+  primeiro passo frio (carga do modelo). **Pré-aquecer o modelo antes do
+  palco.** Investigação de 5 passos: ~17s de tempo de modelo.
+- Tropeços observados do qwen3:8b (insumo da etapa 3): escreve LogQL inválido
+  (`{service_name} |= "error"` sem valor no label), repete a mesma chamada
+  errada, e desiste explicando o erro de sintaxe em vez de corrigi-lo.
 
 A etapa 3 é a que ninguém planeja e onde mora o risco: o erro da rodada 1
 precisa ser reprodutível, senão a apresentação vira torcida.

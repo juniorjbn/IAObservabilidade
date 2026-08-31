@@ -37,6 +37,19 @@ make derrubar     # apaga tudo
 dispara o incidente, cura, mede de novo e falha com código diferente de zero se
 o comportamento não for o esperado. É a diferença entre saber e torcer.
 
+## O agente (etapa 2)
+
+```bash
+python3 -m venv agente/.venv && agente/.venv/bin/pip install -r agente/requirements.txt
+brew install mcp-grafana   # servidor MCP oficial, roda sempre com -disable-write
+make agente                # rodada 1: investiga SEM contexto de ambiente
+make agente-r2             # rodada 2: injeta contexto/*.md no system prompt
+```
+
+O agente expõe ao modelo só 5 ferramentas de leitura do MCP do Grafana e
+para em um portão humano antes de cada chamada (Enter aprova, `n` nega).
+`--sim` aprova tudo, para ensaio; `--pergunta` muda a pergunta.
+
 ## A topologia, e por que ela é assim
 
 ```
