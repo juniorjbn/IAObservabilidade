@@ -53,7 +53,7 @@ As quatro coisas, combinadas:
 | 3 | Calibração — o erro da rodada 1 tem que ser reprodutível | a fazer |
 | 4 | Camada de contexto e ferramentas de domínio | a fazer |
 | 5 | Roteiro de palco minutado | a fazer, só depois de medir o modelo |
-| 6 | Dossiê de referências verificadas | a fazer |
+| 6 | Dossiê de referências verificadas | **pronto** — `referencias/DOSSIE.md`, tudo na fonte primária |
 
 Notas da etapa 2 (31/08/2026, testado nesta máquina):
 
@@ -96,8 +96,11 @@ Verificado, com as ressalvas que importam para não tomar pergunta hostil:
   MCP segue imaturo para operação em produção, e descreve o problema de
   entropia de contexto.
 - **PACE-LM** (arXiv 2309.05833) **não mede propensão a alucinar**. Mede
-  *calibração*: reduz o ECE a 31% do baseline, sobre 100 mil+ incidentes da
-  Microsoft. Fraseado seguro no palco: "a Microsoft precisou construir um
+  *calibração*: reduz o ECE a 31% do baseline, sobre 121.308 incidentes.
+  O paper diz "CompanyX"; a afiliação Microsoft está nos autores — dizer
+  "pesquisadores da Microsoft". O 31% vale só para GPT-4 vs. baseline de
+  binning uniforme; se citar número, dizer "cerca de um terço". Fraseado
+  seguro no palco: "pesquisadores da Microsoft precisaram construir um
   estimador de confiança porque o modelo não sabe quando não sabe."
 - **Roy et al.** (arXiv 2403.04123) achou que adicionar as *discussões dos
   incidentes* como input não melhora performance — é mais estreito que "mais
@@ -137,6 +140,23 @@ modelo `qwen3:8b` baixado (5,2G).
 **Cuidado com o RTK**: o proxy de tokens trunca saída de `curl` em pipe e
 quebra parse de JSON. Consultas à API do Grafana devem escrever em arquivo
 (`curl -o arquivo`) e ler de lá.
+
+## Prazo, cronograma e fechamento (acordados em 31/08/2026)
+
+**Palestra: TDC São Paulo, ~14/09/2026** (duas semanas a partir de 31/08).
+
+- Semana 1 (até 06/09): código — calibração (etapa 3) e contexto (etapa 4).
+  Se o qwen3:8b não der conta do loop, trocar de modelo até quarta 02/09.
+- Semana 2 (07–13/09): palco — roteiro minutado com tempos reais, vídeo do
+  plano B, 2+ ensaios completos. `make verificar` antes de cada ensaio.
+
+**Fechamento aprovado**, em três frases: (1) a IA não resolveu o incidente;
+(2) quem aprovou cada passo dela, e quem reverte a configuração, é você;
+(3) o que ela entregou foi o detalhe que você não tinha visto — um worker
+que não aparece em nenhum trace. O título vira a última fala.
+
+Nota de palco: pré-aquecer o modelo antes de subir (o passo frio leva ~25s;
+quente, 1,6–3,1s por passo).
 
 ## Como trabalhar aqui
 
