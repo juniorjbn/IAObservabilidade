@@ -98,16 +98,29 @@ Verificado, com as ressalvas que importam para não tomar pergunta hostil:
 - **`grafana/otel-lgtm`** roda a stack toda num container com 512Mi–2Gi.
   Fixado em `0.32.0`.
 
-## Ainda não verificado
+## Verificado em hardware real (31/08/2026, no Mac do palco)
 
-Não há daemon de Docker no ambiente de nuvem onde a etapa 1 foi construída.
-Segue sem teste em hardware real:
+As três pendências da construção em nuvem foram fechadas:
 
-1. O container `otel-lgtm` recebendo os três sinais de fato
-2. O orçamento de memória no Mac de 16GB, com Docker Desktop no meio
-3. O build da imagem Python
+1. **Os três sinais chegam no LGTM**: métrica `db_pool_conexoes_em_uso` no
+   Prometheus para os três serviços, logs do worker no Loki, traces do
+   checkout no Tempo.
+2. **Memória real da stack: ~1,0G** (lgtm 756M + postgres 42M + 4 Python
+   ~242M), bem abaixo dos 2,9G orçados. A máquina tem 18G, não 16 — os 16
+   eram margem de cautela deliberada, que agora ficou ainda maior.
+3. **Build e `make verificar` passam**: 716 req/10s a 100% na linha de base,
+   0% durante o incidente (503=40), 100% após a cura.
 
-Rodar `make subir && make verificar` numa máquina com Docker resolve os três.
+Ao vivo, o retrato do incidente confirmou o desenho: pool do inventory
+cravado em 5, worker com 1 conexão (a transação longa), checkout em 0 —
+a pista falsa funcionando.
+
+Ambiente do palco: Ollama instalado via Homebrew (serviço no launchd),
+modelo `qwen3:8b` baixado (5,2G).
+
+**Cuidado com o RTK**: o proxy de tokens trunca saída de `curl` em pipe e
+quebra parse de JSON. Consultas à API do Grafana devem escrever em arquivo
+(`curl -o arquivo`) e ler de lá.
 
 ## Como trabalhar aqui
 
