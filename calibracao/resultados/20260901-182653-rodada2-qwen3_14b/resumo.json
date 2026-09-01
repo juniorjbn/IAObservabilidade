@@ -1,0 +1,168 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260901-182653",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço inventory-api está com o pool de conexões no limite, e há transações que estão bloqueando outras, especialmente a atualização do SKU-0003. Além disso, o reconciliation-worker está causando bloqueios com a query",
+      "parede_s": 70.6,
+      "tempo_modelo_s": 69.4,
+      "passos": 4,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está causando o bloqueio no banco de dados, segurando locks por meio de transações longas durante o backfill. Isso está resultando no esgotamento do pool de conexões do **inventory-api",
+      "parede_s": 92.0,
+      "tempo_modelo_s": 90.6,
+      "passos": 7,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "O pool de conexões do inventory-api está no limite, com 5 conexões em uso e 932 esgotamentos no último período de 15 minutos. Isso indica que o serviço está enfrentando congestionamento, provavelmente devido a operações ",
+      "parede_s": 57.6,
+      "tempo_modelo_s": 56.3,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está causando o bloqueio no banco de dados, executando queries longas (como SELECT pg_sleep(20)) que estão travando as atualizações no inventory-api. Isso está resultando em um grande núme",
+      "parede_s": 28.7,
+      "tempo_modelo_s": 27.5,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando bloqueios no Postgres, causando um congestionamento no pool de conexões do inventory-api, que está no limite de capacidade. A query SELECT pg_sleep(20) está sendo executada ",
+      "parede_s": 32.8,
+      "tempo_modelo_s": 31.7,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está causando o bloqueio no banco de dados, devido à configuração `reconciliacao.backfill=true`, que ativa transações longas durante o backfill trimestral. Essas transações estão trava",
+      "parede_s": 56.0,
+      "tempo_modelo_s": 54.8,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está causando o bloqueio no banco de dados, pois está executando transações longas (como `SELECT pg_sleep(20)`) que estão travando as atualizações no `inventory-api`. Isso está resulta",
+      "parede_s": 33.2,
+      "tempo_modelo_s": 32.1,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de uma consulta que está causando um bloqueio (SELECT pg_sleep(20)), o que está resultando no pool do inventory-api estar no limite. Isso es",
+      "parede_s": 58.3,
+      "tempo_modelo_s": 57.0,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de uma query `SELECT pg_sleep(20)`, o que está causando congestionamento no pool de conexões do inventory-api, que está no limite de capacid",
+      "parede_s": 57.0,
+      "tempo_modelo_s": 55.9,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **inventory-api** está com o pool de conexões esgotado (5/5 em uso) e o número de esgotamentos está crescendo, indicando que conexões estão sendo bloqueadas ou travadas. Como o **reconciliation-worker** está em",
+      "parede_s": 90.4,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 10
+  },
+  "meta": ">= 9/10 acerto"
+}
