@@ -8,3 +8,4 @@ venv/
 capturas/
 agente/.venv/
 graphify-out/
+roteiro/videos/*.gif

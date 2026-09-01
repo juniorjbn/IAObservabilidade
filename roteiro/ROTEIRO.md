@@ -55,6 +55,9 @@ curl -s http://localhost:11434/api/generate -d \
 
 ## Pendências desta etapa
 
-- [ ] Gravar o vídeo do plano B (rodadas 1 e 2 completas, tela limpa)
+- [x] Vídeo do plano B gravado (01/09): `roteiro/videos/rodada{1,2}.mp4`,
+      71s e 70s, tempo fiel ao real. Takes exemplares: rodada 1 culpa o
+      inventory em 5 passos; rodada 2 nomeia worker+flag+locks e propõe a
+      correção. Fonte: os `.cast` (re-renderizáveis com `agg`).
 - [ ] Ensaio completo cronometrado ×2 (a minutagem acima é hipótese até o ensaio)
 - [ ] Decidir slide de abertura/identidade visual (fora do escopo deste repo até agora)
