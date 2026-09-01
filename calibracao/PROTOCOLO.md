@@ -52,6 +52,7 @@ recalibrar do zero. Depois de quarta, não há mais tempo de recalibrar.
 |---|---|---|---|---|
 | 1 (sem contexto) | qwen3:14b | **9/10 erro bom** | ≥8/10 | **APROVADA** |
 | 2 (com contexto) | qwen3:8b | **9/10 apontando o worker** | ≥9/10 | **APROVADA** |
+| 2 (com contexto) | qwen3:14b | **10/10 apontando o worker** | ≥9/10 | **APROVADA** |
 
 Rodada 1: 9 diagnósticos firmes culpando o inventory-api, 31–77s por
 investigação. O 8b assintotou em ~4,5/10 após 5 baterias de ajuste
@@ -69,6 +70,7 @@ Configuração aprovada: prompt v3 + shim de tempo relativo + sanitizador de
 TraceQL + reprompt/conclusão forçada + 5 tools genéricas (rodada 1) + 3
 ferramentas de domínio e contexto/*.md (rodada 2).
 
-**Decisão pendente para o roteiro:** a rodada 1 está calibrada no 14b e a
-rodada 2 no 8b. Usar modelos diferentes ao vivo pode soar como truque;
-medir a rodada 2 também no 14b fecharia a lacuna (bateria de ~10 min).
+**Decisão resolvida (01/09):** a rodada 2 foi medida também no 14b: 10/10,
+27–91s por investigação. O palco roda o **14b nas duas rodadas** (sem
+alternância de modelo, à prova de cético); o resultado do 8b na rodada 2
+vira o kicker opcional em slide — "até o modelo menor acerta, com contexto".

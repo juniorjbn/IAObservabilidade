@@ -81,8 +81,8 @@ As duas rodadas estão calibradas (metas 8/10 e 9/10 batidas; números e
 configuração vencedora em `calibracao/PROTOCOLO.md`). O achado que muda o
 fechamento: a rodada 2 passou no **8b** — o mesmo modelo que sem contexto
 assintotou em 50% de diagnóstico vago. Não foi o modelo que cresceu, foi o
-contexto. Decisão pendente: medir a rodada 2 também no 14b para o palco não
-alternar modelos entre rodadas (ver protocolo).
+contexto. A rodada 2 também passou no 14b (10/10): o palco usa 14b nas duas
+rodadas, e o 8b é o kicker em slide.
 
 ## Riscos conhecidos
 
