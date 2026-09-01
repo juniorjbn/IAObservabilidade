@@ -86,6 +86,98 @@ PROMPT_BASE = (
 )
 
 
+# ─── Ferramentas de domínio (só entram na rodada 2, com --com-contexto) ─────
+# Não são wrappers de PromQL: cada uma responde uma pergunta que um humano
+# de plantão DESTE ambiente faria. A interface é o contexto.
+
+GRAFANA_PROXY = "http://localhost:3000/api/datasources/proxy/uid"
+AUTH_GRAFANA = ("admin", "admin")
+POSTGRES_DSN = "postgresql://demo:demo@localhost:5432/loja"
+
+
+def _prom(consulta: str) -> list:
+    resposta = requests.get(f"{GRAFANA_PROXY}/prometheus/api/v1/query",
+                            params={"query": consulta},
+                            auth=AUTH_GRAFANA, timeout=10)
+    resposta.raise_for_status()
+    return resposta.json()["data"]["result"]
+
+
+def saude_do_pool(**_args) -> str:
+    """Estado do pool de conexões de cada serviço, num relance."""
+    em_uso = {m["metric"].get("service_name", "?"): float(m["value"][1])
+              for m in _prom("db_pool_conexoes_em_uso")}
+    capacidade = {m["metric"].get("service_name", "?"): float(m["value"][1])
+                  for m in _prom("db_pool_capacidade")}
+    esgotos = {m["metric"].get("service_name", "?"): float(m["value"][1])
+               for m in _prom("sum by (service_name) "
+                              "(increase(db_pool_esgotamentos_total[15m]))")}
+    linhas = ["serviço | em uso/capacidade | esgotamentos (15min)"]
+    for svc in sorted(capacidade):
+        cheio = " <- POOL NO LIMITE" if em_uso.get(svc, 0) >= capacidade[svc] else ""
+        linhas.append(f"{svc} | {em_uso.get(svc, 0):.0f}/{capacidade[svc]:.0f} | "
+                      f"{esgotos.get(svc, 0):.0f}{cheio}")
+    return "\n".join(linhas)
+
+
+def quem_esta_segurando_locks(**_args) -> str:
+    """Sessões bloqueadas no Postgres e quem as bloqueia, por nome."""
+    import psycopg2
+    sql = """
+        SELECT bloqueada.application_name,
+               bloqueadora.application_name,
+               COALESCE(round(extract(epoch FROM now() - bloqueadora.xact_start)), 0),
+               left(bloqueadora.query, 90)
+        FROM pg_stat_activity bloqueada
+        JOIN LATERAL unnest(pg_blocking_pids(bloqueada.pid)) AS b(pid) ON true
+        JOIN pg_stat_activity bloqueadora ON bloqueadora.pid = b.pid
+    """
+    with psycopg2.connect(POSTGRES_DSN, connect_timeout=5) as conexao:
+        with conexao.cursor() as cursor:
+            cursor.execute(sql)
+            linhas = cursor.fetchall()
+    if not linhas:
+        return "Nenhuma sessão bloqueada no banco agora."
+    saida = ["quem espera | quem bloqueia | transação aberta há (s) | última query de quem bloqueia"]
+    saida += [f"{a or '?'} | {b or '?'} | {c:.0f}s | {q}" for a, b, c, q in linhas]
+    return "\n".join(saida)
+
+
+def mudancas_recentes(janela_minutos: int = 60, **_args) -> str:
+    """Mudanças de configuração registradas nos logs na janela recente."""
+    agora_ns = int(time.time() * 1e9)
+    inicio_ns = agora_ns - int(janela_minutos) * 60 * 1_000_000_000
+    resposta = requests.get(
+        f"{GRAFANA_PROXY}/loki/loki/api/v1/query_range",
+        params={"query": '{service_name=~".+"} |= "mudança de configuração"',
+                "start": inicio_ns, "end": agora_ns, "limit": 20},
+        auth=AUTH_GRAFANA, timeout=10)
+    resposta.raise_for_status()
+    eventos = []
+    for fluxo in resposta.json()["data"]["result"]:
+        servico = fluxo["stream"].get("service_name", "?")
+        for _ts, linha in fluxo["values"]:
+            eventos.append(f"[{servico}] {linha.strip()}")
+    return "\n".join(eventos) or f"Nenhuma mudança registrada nos últimos {janela_minutos} min."
+
+
+FERRAMENTAS_DOMINIO = {
+    "saude_do_pool": (saude_do_pool, {
+        "type": "object", "properties": {}, "required": []},
+        "Estado atual do pool de conexões de banco de cada serviço: em uso, "
+        "capacidade e esgotamentos recentes."),
+    "quem_esta_segurando_locks": (quem_esta_segurando_locks, {
+        "type": "object", "properties": {}, "required": []},
+        "Sessões bloqueadas no Postgres agora e quem as bloqueia, com o nome "
+        "da aplicação e a idade da transação."),
+    "mudancas_recentes": (mudancas_recentes, {
+        "type": "object", "properties": {"janela_minutos": {"type": "integer",
+        "description": "janela em minutos (padrão 60)"}}, "required": []},
+        "Deploys, flags e configs alteradas registradas nos logs na janela "
+        "recente."),
+}
+
+
 def montar_system_prompt(com_contexto: bool) -> str:
     if not com_contexto:
         return PROMPT_BASE
@@ -197,13 +289,20 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
             tools_ollama = [{"type": "function", "function": {
                 "name": t.name, "description": t.description,
                 "parameters": t.input_schema}} for t in expostas]
+            nomes_validos = set(FERRAMENTAS)
+            if com_contexto:
+                nomes_validos |= set(FERRAMENTAS_DOMINIO)
+                tools_ollama += [{"type": "function", "function": {
+                    "name": nome, "description": descricao,
+                    "parameters": schema}}
+                    for nome, (_f, schema, descricao) in FERRAMENTAS_DOMINIO.items()]
 
             rotulo = "COM contexto de ambiente" if com_contexto else "SEM contexto de ambiente"
             print(f"{NEGRITO}Agente de investigação — {rotulo}{FIM}")
-            print(f"{CINZA}modelo {MODELO} · {len(expostas)} ferramentas expostas "
+            print(f"{CINZA}modelo {MODELO} · {len(tools_ollama)} ferramentas expostas "
                   f"(de {len(todas)} nos 2 servidores MCP, escrita desabilitada){FIM}")
-            for t in expostas:
-                print(f"{CINZA}  · {t.name}{FIM}")
+            for ferramenta in tools_ollama:
+                print(f"{CINZA}  · {ferramenta['function']['name']}{FIM}")
 
             mensagens = [
                 {"role": "system", "content": montar_system_prompt(com_contexto)},
@@ -245,11 +344,18 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
                     print(f"\n{CINZA}passo {passo} · modelo pensou por "
                           f"{corpo['_segundos']:.1f}s{FIM}")
 
-                    if nome not in FERRAMENTAS:
+                    if nome not in nomes_validos:
                         resultado = f"ferramenta desconhecida: {nome}"
                     elif not portao_humano(nome, args, auto):
                         resultado = "NEGADO pelo operador humano."
                         print(f"{VERMELHO}✗ negado{FIM}")
+                    elif nome in FERRAMENTAS_DOMINIO:
+                        try:
+                            resultado = FERRAMENTAS_DOMINIO[nome][0](**args)
+                        except Exception as erro:  # noqa: BLE001
+                            resultado = f"erro na ferramenta: {erro}"
+                        print(f"{VERDE}✓ executado{FIM} "
+                              f"{CINZA}({len(resultado)} chars, domínio){FIM}")
                     else:
                         try:
                             retorno = await dona[nome].call_tool(
@@ -265,8 +371,20 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
                     mensagens.append({"role": "tool", "tool_name": nome,
                                       "content": truncar(resultado)})
 
-            print(f"\n{VERMELHO}Teto de {MAX_PASSOS} passos atingido sem diagnóstico.{FIM}")
-            print(f"{CINZA}tempo de modelo: {tempo_total_modelo:.1f}s{FIM}")
+            # Teto atingido: última palavra forçada, sem ferramentas. A
+            # calibração mostrou o modelo com a evidência completa no
+            # histórico gastando os passos finais em "confirmações".
+            print(f"\n{AMARELO}Teto de {MAX_PASSOS} passos — o host encerra e "
+                  f"pede a conclusão.{FIM}")
+            mensagens.append({"role": "user", "content": (
+                "Encerre AGORA com seu diagnóstico objetivo da causa raiz, "
+                "baseado apenas no que você já coletou.")})
+            corpo = chamar_ollama(mensagens, [], pensar)
+            tempo_total_modelo += corpo["_segundos"]
+            print(f"\n{VERDE}{NEGRITO}═══ DIAGNÓSTICO (forçado no teto) ═══{FIM}")
+            print((corpo["message"].get("content") or "").strip())
+            print(f"\n{CINZA}tempo de modelo: {tempo_total_modelo:.1f}s "
+                  f"em {MAX_PASSOS}+1 passos{FIM}")
 
 
 def main() -> None:

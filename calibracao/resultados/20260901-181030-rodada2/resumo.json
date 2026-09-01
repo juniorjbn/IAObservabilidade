@@ -1,0 +1,189 @@
+{
+  "rodada": "rodada2",
+  "quando": "20260901-181030",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "**Diagnóstico da causa raiz:** A causa raiz do problema é a **ativação da flag `reconciliacao.backfill=true` no reconciliation-worker**, que está executando transações longas e bloqueando locks na tabela `inventory`. Iss",
+      "parede_s": 78.7,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "**Diagnóstico da causa raiz:** A causa raiz do erro 503 no `checkout-api` é a **bloqueio de conexões no pool do `inventory-api`** causado por **transações longas no `reconciliation-worker`**. **Evidências:** 1. **Logs do",
+      "parede_s": 83.2,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "**Diagnóstico da causa raiz:** A causa raiz do erro 503 no `checkout-api` é a **bloqueio de conexões no pool do `inventory-api`** causado por **transações longas do `reconciliation-worker`** em execução com a flag `recon",
+      "parede_s": 67.6,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "acerto_precoce",
+      "diagnostico": "A causa raiz do erro 503 no checkout-api é a transação longa do reconciliation-worker ativada pela flag `reconciliacao.backfill=true`, que está segurando locks na tabela `inventory` do PostgreSQL. Esses locks estão bloqu",
+      "parede_s": 67.1,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_datasources"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "acerto_precoce",
+      "diagnostico": "O diagnóstico objetivo da causa raiz mais provável é que o **inventory-api** está causando atrasos e esgotamento de conexões no pool de banco de dados, o que está levando a erros 503 no **checkout-api**. A evidência que ",
+      "parede_s": 36.0,
+      "tempo_modelo_s": 35.1,
+      "passos": 3,
+      "ferramentas": [
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "acerto_precoce",
+      "diagnostico": "**Diagnóstico da causa raiz:** A causa raiz do erro 503 no `checkout-api` é a **bloqueio de locks na tabela `inventory` causado pelo job `reconciliation-worker` em modo de backfill**. **Evidências:** - O `checkout-api` e",
+      "parede_s": 63.6,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "acerto_precoce",
+      "diagnostico": "**Diagnóstico da causa raiz:** A causa raiz do erro 503 no `checkout-api` é a **bloqueio de locks na tabela `inventory` por transações longas do `reconciliation-worker`**, que está executando um **backfill com transações",
+      "parede_s": 51.9,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço `inventory-api` está travando devido a transações longas no banco de dados, causadas pela flag `reconciliacao.backfill=true` no `reconciliation-worker`. Essa flag ativa transações longas no `inventory-api`, blo",
+      "parede_s": 27.0,
+      "tempo_modelo_s": 26.0,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "acerto_precoce",
+      "diagnostico": "A causa raiz mais provável é o **inventory-api** estar esgotando seu pool de conexões devido a transações longas causadas pela flag `reconciliacao.backfill=true` ativada no **reconciliation-worker**. A evidência é: - O *",
+      "parede_s": 49.9,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_datasources"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "acerto_precoce",
+      "diagnostico": "A causa raiz mais provável é o **inventory-api** estar esgotando seu pool de conexões devido a transações longas causadas pela flag `reconciliacao.backfill=true` ativada no `reconciliation-worker`. **Evidência:** - O `ch",
+      "parede_s": 45.8,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_loki_label_names",
+        "list_datasources"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 10
+  },
+  "meta": ">= 9/10 acerto"
+}

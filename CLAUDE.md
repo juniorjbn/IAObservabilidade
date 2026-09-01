@@ -50,8 +50,8 @@ As quatro coisas, combinadas:
 |---|---|---|
 | 1 | Demo reproduzível (stack + incidente) | **pronta, verificada** |
 | 2 | Agente Python: 5 tools, portão humano, corte de saída | **pronta, testada com o modelo real** |
-| 3 | Calibração — o erro da rodada 1 tem que ser reprodutível | a fazer |
-| 4 | Camada de contexto e ferramentas de domínio | a fazer |
+| 3 | Calibração — o erro da rodada 1 tem que ser reprodutível | **aprovada: 9/10 no qwen3:14b** |
+| 4 | Camada de contexto e ferramentas de domínio | **pronta; rodada 2 aprovada: 9/10 no qwen3:8b** |
 | 5 | Roteiro de palco minutado | a fazer, só depois de medir o modelo |
 | 6 | Dossiê de referências verificadas | **pronto** — `referencias/DOSSIE.md`, tudo na fonte primária |
 
@@ -77,8 +77,12 @@ Notas da etapa 2 (31/08/2026, testado nesta máquina):
   MCP serve a doc de TraceQL como tool (`docs-traceql`) — candidata a 6ª
   ferramenta ou a virar material de contexto na rodada 2.
 
-A etapa 3 é a que ninguém planeja e onde mora o risco: o erro da rodada 1
-precisa ser reprodutível, senão a apresentação vira torcida.
+As duas rodadas estão calibradas (metas 8/10 e 9/10 batidas; números e
+configuração vencedora em `calibracao/PROTOCOLO.md`). O achado que muda o
+fechamento: a rodada 2 passou no **8b** — o mesmo modelo que sem contexto
+assintotou em 50% de diagnóstico vago. Não foi o modelo que cresceu, foi o
+contexto. Decisão pendente: medir a rodada 2 também no 14b para o palco não
+alternar modelos entre rodadas (ver protocolo).
 
 ## Riscos conhecidos
 

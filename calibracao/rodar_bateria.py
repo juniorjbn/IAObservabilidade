@@ -43,7 +43,7 @@ def controlar_incidente(acao: str) -> None:
 
 def classificar(saida: str) -> tuple[str, str]:
     """Devolve (classe, diagnostico_resumido) segundo a tabela do protocolo."""
-    m = re.search(r"═══ DIAGNÓSTICO \(passo \d+\) ═══\n(.*?)\n\ntempo de modelo",
+    m = re.search(r"═══ DIAGNÓSTICO \([^)]+\) ═══\n(.*?)\n\ntempo de modelo",
                   saida, re.DOTALL)
     if not m:
         return "falha_de_modelo", "(sem diagnóstico: teto de passos ou aborto)"
