@@ -1,0 +1,200 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260831-192521",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 34.8,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.7,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.7,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.6,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.7,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.8,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.6,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.7,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.7,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.4,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "falha_de_modelo": 10
+  },
+  "meta": ">= 8/10 erro_bom"
+}

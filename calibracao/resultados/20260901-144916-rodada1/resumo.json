@@ -1,0 +1,194 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260901-144916",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 32.8,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 17.7,
+      "tempo_modelo_s": 16.7,
+      "passos": 6,
+      "ferramentas": [
+        "traceql-search",
+        "query_prometheus",
+        "list_datasources",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 26.6,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 17.4,
+      "tempo_modelo_s": 16.6,
+      "passos": 6,
+      "ferramentas": [
+        "traceql-search",
+        "query_prometheus",
+        "list_datasources",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 24.8,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 22.2,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 24.5,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "erro_bom",
+      "diagnostico": "O erro 503 do `checkout-api` está relacionado a falhas na comunicação com serviços dependentes, conforme indicado pelos traces com status \"error\". A causa raiz mais provável é uma falha no serviço `inventory-api`, que es",
+      "parede_s": 24.7,
+      "tempo_modelo_s": 23.8,
+      "passos": 8,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 26.0,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 27.9,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "falha_de_modelo": 9,
+    "erro_bom": 1
+  },
+  "meta": ">= 8/10 erro_bom"
+}

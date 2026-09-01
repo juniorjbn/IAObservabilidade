@@ -1,0 +1,169 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260831-193041",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro de sintaxe no TraceQL sugere que a estrutura da consulta está incorreta. A sintaxe correta para uma consulta TraceQL envolve a utilização de palavras-chave específicas, como `with` para definir filtros. Vamos ajus",
+      "parede_s": 26.0,
+      "tempo_modelo_s": 25.1,
+      "passos": 5,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "revisar_manualmente",
+      "diagnostico": "A consulta de traces para o serviço `checkout-api` retornou resultados, o que indica que o serviço está sendo chamado e está gerando traces. No entanto, o erro 503 (Service Unavailable) sugere que o serviço está indispon",
+      "parede_s": 31.4,
+      "tempo_modelo_s": 30.6,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "erro_bom",
+      "diagnostico": "A análise dos traces revela que o `checkout-api` está retornando erros, com `errorCount` igual a 3. Isso sugere que há falhas no serviço `checkout-api` que estão causando os erros 503. A causa raiz mais provável é uma fa",
+      "parede_s": 34.1,
+      "tempo_modelo_s": 33.4,
+      "passos": 6,
+      "ferramentas": [
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro de sintaxe em TraceQL sugere que a consulta está mal formada. Vamos tentar uma abordagem diferente, usando apenas o filtro `{resource.service.name = \"checkout-api\"}` para verificar se há traces relacionados ao ser",
+      "parede_s": 17.5,
+      "tempo_modelo_s": 16.7,
+      "passos": 5,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 32.0,
+      "tempo_modelo_s": 31.0,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "query_loki_logs",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "erro_bom",
+      "diagnostico": "A análise dos traces revela que o serviço `checkout-api` está sendo chamado, mas não há evidências diretas de erros 503 (Service Unavailable) nos spans. Isso sugere que o problema pode estar relacionado a uma falha no ba",
+      "parede_s": 32.1,
+      "tempo_modelo_s": 31.2,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro de sintaxe no TraceQL sugere que a consulta está mal formada. Vamos ajustar a consulta para garantir que ela seja válida. Vamos tentar novamente com uma estrutura correta.",
+      "parede_s": 14.0,
+      "tempo_modelo_s": 13.2,
+      "passos": 4,
+      "ferramentas": [
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro de sintaxe no TraceQL sugere que a estrutura da consulta está incorreta. Vamos ajustar a consulta para que ela seja válida. A sintaxe correta para uma consulta TraceQL é `{resource.service.name = \"checkout-api\"}`.",
+      "parede_s": 15.0,
+      "tempo_modelo_s": 14.1,
+      "passos": 4,
+      "ferramentas": [
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável do erro 503 no `checkout-api` é uma falha em uma dependência externa, especificamente no `inventory-api`. A análise dos traces revela que há um número significativo de spans com erro no `invent",
+      "parede_s": 35.3,
+      "tempo_modelo_s": 34.5,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável do erro 503 no `checkout-api` é a falha de dependência com o `inventory-api`, que está retornando erros. Isso está evidente pela análise dos traces, onde ambos os serviços (`checkout-api` e `in",
+      "parede_s": 29.5,
+      "tempo_modelo_s": 28.6,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "revisar_manualmente": 5,
+    "erro_bom": 4,
+    "falha_de_modelo": 1
+  },
+  "meta": ">= 8/10 erro_bom"
+}

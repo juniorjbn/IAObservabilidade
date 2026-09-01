@@ -1,0 +1,187 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260831-185802",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O resultado do query_loki_logs indica que não foram encontradas entradas de log para o período especificado. Isso pode significar que não há logs disponíveis para o `checkout-api` nesse intervalo de tempo, ou que os filt",
+      "parede_s": 18.4,
+      "tempo_modelo_s": 17.4,
+      "passos": 3,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 24.5,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 20.8,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 19.2,
+      "tempo_modelo_s": 18.3,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 19.3,
+      "tempo_modelo_s": 18.5,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 21.1,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 18.6,
+      "tempo_modelo_s": 17.7,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 30.4,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 20.5,
+      "tempo_modelo_s": 19.7,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 19.5,
+      "tempo_modelo_s": 18.6,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "revisar_manualmente": 1,
+    "falha_de_modelo": 9
+  },
+  "meta": ">= 8/10 erro_bom"
+}

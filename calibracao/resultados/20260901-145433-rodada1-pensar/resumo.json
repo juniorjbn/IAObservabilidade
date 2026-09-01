@@ -1,0 +1,165 @@
+{
+  "rodada": "rodada1-pensar",
+  "quando": "20260901-145433",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 187.4,
+      "tempo_modelo_s": 186.5,
+      "passos": 4,
+      "ferramentas": [
+        "query_prometheus",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 272.1,
+      "tempo_modelo_s": 270.9,
+      "passos": 8,
+      "ferramentas": [
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 103.1,
+      "tempo_modelo_s": 102.1,
+      "passos": 5,
+      "ferramentas": [
+        "list_datasources",
+        "query_prometheus",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 do `checkout-api` está relacionado à inatividade do serviço, que não está sendo monitorado corretamente pelos dados de observabilidade. A consulta no Prometheus retornou zero resultados porque: 1. **O job `che",
+      "parede_s": 166.4,
+      "tempo_modelo_s": 165.5,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "query_loki_logs",
+        "query_prometheus",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "erro_bom",
+      "diagnostico": "Diagnóstico: A causa raiz mais provável é a falta de logs/métricas disponíveis para o `checkout-api` nos últimos 5 minutos, combinada a um erro 503 (Service Unavailable) que sugere falha na dependência ou sobrecarga do s",
+      "parede_s": 192.4,
+      "tempo_modelo_s": 191.4,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "query_loki_logs",
+        "query_prometheus",
+        "query_prometheus",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 91.7,
+      "tempo_modelo_s": 90.8,
+      "passos": 3,
+      "ferramentas": [
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 103.2,
+      "tempo_modelo_s": 102.3,
+      "passos": 5,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "erro_bom",
+      "diagnostico": "Diagnóstico: O erro 503 do checkout-api provavelmente está relacionado a uma falha no serviço backend ou em sua configuração de monitoramento. As consultas a Prometheus e Loki não retornaram dados, o que sugere que: 1. *",
+      "parede_s": 155.4,
+      "tempo_modelo_s": 154.4,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "query_prometheus",
+        "query_prometheus",
+        "query_prometheus",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 100.7,
+      "tempo_modelo_s": 99.8,
+      "passos": 3,
+      "ferramentas": [
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 91.5,
+      "tempo_modelo_s": 90.6,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "falha_de_modelo": 7,
+    "revisar_manualmente": 1,
+    "erro_bom": 2
+  },
+  "meta": ">= 9/10 acerto"
+}

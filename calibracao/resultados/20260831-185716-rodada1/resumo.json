@@ -1,0 +1,24 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260831-185716",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Não foram encontrados dados fontes relacionados ao `checkout-api` para Prometheus, Loki ou Tempo. Isso sugere que não há observabilidade configurada diretamente para o `checkout-api` ou que o nome da fonte de dados não e",
+      "parede_s": 20.1,
+      "tempo_modelo_s": 19.2,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "list_datasources",
+        "list_datasources"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "revisar_manualmente": 1
+  },
+  "meta": ">= 8/10 erro_bom"
+}
