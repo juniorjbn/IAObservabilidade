@@ -1,0 +1,163 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260901-163804",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "erro_bom",
+      "diagnostico": "A análise dos traces revela que o serviço `checkout-api` está sendo chamado, mas não há evidências de erros 503 diretamente associados a ele. A ausência de `status_code = 503` nas traces sugere que o problema pode estar ",
+      "parede_s": 54.2,
+      "tempo_modelo_s": 53.0,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 do `checkout-api` está relacionado a falhas de serviço, mas a consulta no TraceQL apresentou um erro de sintaxe, o que sugere que o campo `status_code` não está disponível ou a estrutura da consulta está incor",
+      "parede_s": 29.7,
+      "tempo_modelo_s": 28.7,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 está relacionado a falhas de serviço, e a consulta TraceQL original apresentou um erro de sintaxe, o que sugere que a estrutura da consulta não é compatível com a versão do TraceQL em uso. Com base nas informa",
+      "parede_s": 27.0,
+      "tempo_modelo_s": 26.2,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 está relacionado a falhas de serviço, e a consulta TraceQL original apresentou um erro de sintaxe, o que sugere que a estrutura da consulta não é compatível com a versão do TraceQL em uso. Com base nas informa",
+      "parede_s": 27.5,
+      "tempo_modelo_s": 26.7,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "revisar_manualmente",
+      "diagnostico": "A análise dos traces revela que o serviço `checkout-api` está sendo chamado, mas não há evidências diretas de erros 503 (Service Unavailable) nos traces. Isso sugere que o problema pode estar relacionado a uma falha no b",
+      "parede_s": 32.9,
+      "tempo_modelo_s": 31.8,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 indicativo no checkout-api sugere que há um problema de falha no serviço que o checkout-api está tentando chamar. Com base nas informações coletadas, a causa raiz mais provável é que um dos serviços dependente",
+      "parede_s": 25.1,
+      "tempo_modelo_s": 24.4,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 está relacionado a falhas de serviço, e a consulta TraceQL malformada indica que não foi possível obter dados de traces para o `checkout-api`. Com base nas informações disponíveis, a causa raiz mais provável é",
+      "parede_s": 25.9,
+      "tempo_modelo_s": 25.1,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 está relacionado a falhas de serviço, e a consulta TraceQL malformada indica que não foi possível coletar dados de traces relacionados ao `checkout-api`. Com base nas informações disponíveis, a causa raiz mais",
+      "parede_s": 26.3,
+      "tempo_modelo_s": 25.5,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 está relacionado a falhas de serviço, e a consulta TraceQL mal formada indica que não foi possível obter informações sobre traces relacionados ao `checkout-api`. Com base nas informações coletadas, a causa rai",
+      "parede_s": 26.1,
+      "tempo_modelo_s": 25.3,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 do `checkout-api` indica que o serviço está retornando uma resposta de \"Serviço não disponível\". Com base nas tentativas de consulta no TraceQL, que retornaram erros de sintaxe, e considerando que não foi poss",
+      "parede_s": 25.9,
+      "tempo_modelo_s": 25.1,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "erro_bom": 1,
+    "revisar_manualmente": 9
+  },
+  "meta": ">= 8/10 erro_bom"
+}

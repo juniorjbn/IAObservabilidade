@@ -1,0 +1,179 @@
+{
+  "rodada": "rodada1",
+  "quando": "20260901-164506",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 no `checkout-api` está provavelmente relacionado a uma falha na comunicação com um serviço externo ou interno que o `checkout-api` depende. Com base nas informações coletadas: - As traces do `checkout-api` mos",
+      "parede_s": 44.8,
+      "tempo_modelo_s": 43.7,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "revisar_manualmente",
+      "diagnostico": "A consulta falhou devido a um erro de sintaxe na definição do tempo. A expressão `count_over_time({job=\"checkout-api-logs\"} [5m])` está correta, mas o erro sugere que a variável de tempo não foi definida corretamente. Va",
+      "parede_s": 49.1,
+      "tempo_modelo_s": 48.1,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "list_loki_label_names",
+        "query_loki_logs",
+        "traceql-search",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O checkout-api está retornando erro 503 devido a uma falha no serviço que ele depende. Com base nas informações coletadas, o serviço `checkout-api` está sendo monitorado, mas não há dados de métricas disponíveis no Prome",
+      "parede_s": 49.6,
+      "tempo_modelo_s": 48.7,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "erro_bom",
+      "diagnostico": "Diagnóstico: A causa do problema é a falha do serviço `inventory-api`, que está retornando código de status `503` (Serviço Não Disponível) para o serviço `checkout-api`. Isso está sendo registrado em logs do `checkout-ap",
+      "parede_s": 47.6,
+      "tempo_modelo_s": 46.6,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names",
+        "query_loki_logs",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "erro_bom",
+      "diagnostico": "Diagnóstico: A causa raiz mais provável é uma falha no serviço `inventory-api`, que está recusando reservas de SKUs, resultando em erros HTTP 503 no serviço `checkout-api`. Esses erros estão sendo registrados nos logs do",
+      "parede_s": 52.0,
+      "tempo_modelo_s": 50.8,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names",
+        "query_loki_logs",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 no `checkout-api` está provavelmente relacionado a uma falha na comunicação com um serviço externo ou interno que o `checkout-api` depende. Com base nas informações coletadas: - As traces do `checkout-api` mos",
+      "parede_s": 50.6,
+      "tempo_modelo_s": 49.7,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "erro_bom",
+      "diagnostico": "Diagnóstico: A causa do problema é a falha do serviço `inventory-api`, que está retornando código de status HTTP 503 (Service Unavailable) ao checkout-api. Isso está sendo registrado nos logs do `checkout-api` como erros",
+      "parede_s": 47.6,
+      "tempo_modelo_s": 46.6,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names",
+        "query_loki_logs",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas, a causa raiz mais provável para os erros 503 no `checkout-api` é uma falha ou instabilidade no serviço `inventory-api`, que está sendo chamado pelo `checkout-api`. Isso é evidenciado p",
+      "parede_s": 51.1,
+      "tempo_modelo_s": 50.1,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 no `checkout-api` está relacionado a falhas de dependência ou problemas internos no serviço. Com base nas traces coletadas, observa-se que o `checkout-api` está gerando erros em suas spans, indicando que há fa",
+      "parede_s": 39.1,
+      "tempo_modelo_s": 38.2,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "revisar_manualmente",
+      "diagnostico": "O erro 503 no `checkout-api` está provavelmente relacionado a uma falha na comunicação com um serviço externo ou interno que o `checkout-api` depende. Com base nas informações coletadas: - As traces do `checkout-api` mos",
+      "parede_s": 41.3,
+      "tempo_modelo_s": 40.4,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "revisar_manualmente": 6,
+    "erro_bom": 4
+  },
+  "meta": ">= 8/10 erro_bom"
+}

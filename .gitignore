@@ -7,3 +7,4 @@ venv/
 *.log
 capturas/
 agente/.venv/
+graphify-out/
