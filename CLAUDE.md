@@ -52,7 +52,7 @@ As quatro coisas, combinadas:
 | 2 | Agente Python: 5 tools, portão humano, corte de saída | **pronta, testada com o modelo real** |
 | 3 | Calibração — o erro da rodada 1 tem que ser reprodutível | **aprovada: 9/10 no qwen3:14b** |
 | 4 | Camada de contexto e ferramentas de domínio | **pronta; rodada 2 aprovada: 9/10 no qwen3:8b** |
-| 5 | Roteiro de palco minutado | a fazer, só depois de medir o modelo |
+| 5 | Roteiro de palco minutado | **rascunho pronto** (`roteiro/ROTEIRO.md`) — validar em 2 ensaios |
 | 6 | Dossiê de referências verificadas | **pronto** — `referencias/DOSSIE.md`, tudo na fonte primária |
 
 Notas da etapa 2 (31/08/2026, testado nesta máquina):
