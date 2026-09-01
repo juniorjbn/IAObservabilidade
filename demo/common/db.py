@@ -41,7 +41,13 @@ def criar_engine(nome_servico: str, tamanho_pool: int, timeout_pool: int) -> Eng
         max_overflow=0,
         pool_timeout=timeout_pool,
         pool_pre_ping=True,
-        connect_args={"options": f"-c lock_timeout={LOCK_TIMEOUT_MS}"},
+        # application_name identifica o serviço no pg_stat_activity — sem
+        # isso, a ferramenta de domínio quem_esta_segurando_locks veria só
+        # conexões anônimas e não conseguiria NOMEAR quem trava quem.
+        connect_args={
+            "application_name": nome_servico,
+            "options": f"-c lock_timeout={LOCK_TIMEOUT_MS}",
+        },
     )
 
     @event.listens_for(engine, "connect")

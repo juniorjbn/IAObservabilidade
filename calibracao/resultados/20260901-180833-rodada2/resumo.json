@@ -1,0 +1,29 @@
+{
+  "rodada": "rodada2",
+  "quando": "20260901-180833",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(sem diagnóstico: teto de passos ou aborto)",
+      "parede_s": 58.5,
+      "tempo_modelo_s": null,
+      "passos": null,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "mudancas_recentes",
+        "quem_esta_segurando_locks",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "falha_de_modelo": 1
+  },
+  "meta": ">= 9/10 acerto"
+}
