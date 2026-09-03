@@ -4,4 +4,4 @@
 
 ## Sessões recentes
 
-- [31/08/2026](memory/2026-08-31_sessao.md) — etapas 1/2/6 prontas, Tempo MCP no ar, calibração marcada
+- [31/08/2026 + adendo 01-03/09](memory/2026-08-31_sessao.md) — 6 etapas entregues; pendem gestor IBM (04/09) e ensaios
