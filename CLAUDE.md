@@ -168,6 +168,22 @@ que não aparece em nenhum trace. O título vira a última fala.
 Nota de palco: pré-aquecer o modelo antes de subir (o passo frio leva ~25s;
 quente, 1,6–3,1s por passo).
 
+## Pendências ao pausar (03/09/2026)
+
+Nenhuma técnica; três humanas:
+
+1. **Conversa com o gestor IBM (04/09)** sobre envolver SevOne/Network
+   Intelligence. Recomendação já dada: manter a demo open source; slide de
+   aterrissagem ("o critério para avaliar qualquer fornecedor, inclusive o
+   meu") está SEGURADO até o desfecho. Fato verificado que ajuda: o NI tem
+   servidor MCP nativo (documentação SaaS). Trocar a demo por produto =
+   recomeçar ~80% e contradizer o resumo aceito pelo TDC.
+2. **Dois ensaios cronometrados** — a minutagem do roteiro é hipótese.
+3. **Slides/identidade visual** — nunca entrou neste repositório.
+
+Grafo de conhecimento (graphify-out/) desatualizado desde 31/08 — rodar
+`/graphify . --update` na retomada.
+
 ## Como trabalhar aqui
 
 ```bash
