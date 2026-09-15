@@ -178,8 +178,12 @@ Pendências restantes, todas de palco, nenhuma técnica:
 
 1. **Slides** — João vai gerar. Nunca entraram neste repositório.
 2. **Dois ensaios cronometrados** — a minutagem do roteiro ainda é hipótese.
-3. **Sanidade da stack após 12 dias parada** — `make verificar` antes do
-   primeiro ensaio (imagens Docker, modelo no Ollama, Tempo MCP).
+3. ~~Sanidade da stack após 12 dias parada~~ — feita em 15/09. `make
+   verificar` passou (100% → 0% → 100%), **mas a rodada 2 falhou**: bug de
+   `num_ctx` (padrão 4096; o Ollama descartava o mapa do ambiente no meio
+   da investigação — já acontecia na calibração de 01/09). Corrigido com
+   `num_ctx=16384` + `MODELO_OLLAMA` no Makefile; recalibrado 5/5 nas duas
+   rodadas. Detalhes em `calibracao/PROTOCOLO.md`, seção 15/09.
 
 Grafo de conhecimento (graphify-out/) desatualizado desde 31/08 — rodar
 `/graphify . --update` quando houver folga; não é caminho crítico.

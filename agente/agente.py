@@ -257,7 +257,15 @@ def chamar_ollama(mensagens: list, tools: list, pensar: bool = False) -> dict:
         # passo. --pensar liga, para medir na calibração se o ganho de
         # acerto paga o custo de palco.
         "think": pensar,
-        "options": {"temperature": 0.2},  # investigação pede pouco improviso
+        "options": {
+            "temperature": 0.2,  # investigação pede pouco improviso
+            # Sem isso o Ollama usa 4096 e, ao estourar, descarta o COMEÇO do
+            # prompt (n_keep=4): o mapa do ambiente e as definições das
+            # ferramentas somem no meio da investigação. Achado em 15/09:
+            # a rodada 2 só acertava quando terminava antes do estouro.
+            # 8 passos × ~700 tokens + system prompt ~2500 cabem com folga.
+            "num_ctx": 16384,
+        },
     })
     resposta.raise_for_status()
     corpo = resposta.json()

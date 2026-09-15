@@ -1,0 +1,88 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260915-180954",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de transações longas, causando um bloqueio no inventory-api, que por sua vez está causando o erro 503 no checkout-api. A configuração reconc",
+      "parede_s": 112.2,
+      "tempo_modelo_s": 110.2,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks na tabela inventory com a query SELECT pg_sleep(20), o que está causando o pool do inventory-api a ficar no limite e resultando em erros 503 no checkout-api. A causa r",
+      "parede_s": 25.5,
+      "tempo_modelo_s": 24.0,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "A causa raiz mais provável é que o reconciliation-worker está executando um backfill com transações longas, o que está sobrecarregando o banco de dados e causando o erro 503 no checkout-api.",
+      "parede_s": 27.3,
+      "tempo_modelo_s": 26.0,
+      "passos": 7,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de transações longas, causando o esgotamento do pool de conexões do inventory-api. Isso resulta em atrasos e erros 503 no checkout-api, que ",
+      "parede_s": 26.0,
+      "tempo_modelo_s": 24.8,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está causando o bloqueio no banco de dados ao executar consultas longas (`SELECT pg_sleep(20)`), impedindo que o **inventory-api** conclua suas operações de atualização (`UPDATE invent",
+      "parede_s": 30.6,
+      "tempo_modelo_s": 29.3,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 5
+  },
+  "meta": ">= 9/10 acerto"
+}

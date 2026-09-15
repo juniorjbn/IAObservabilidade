@@ -74,3 +74,40 @@ ferramentas de domínio e contexto/*.md (rodada 2).
 27–91s por investigação. O palco roda o **14b nas duas rodadas** (sem
 alternância de modelo, à prova de cético); o resultado do 8b na rodada 2
 vira o kicker opcional em slide — "até o modelo menor acerta, com contexto".
+
+
+## 15/09/2026 — Bug de contexto encontrado e recalibração
+
+**Achado:** o agente não fixava `num_ctx`; o Ollama usava o padrão de 4096.
+Ao estourar, o llama.cpp faz "context shift" com `n_keep=4`: descarta a
+primeira metade do prompt — que é onde ficam o mapa do ambiente e as
+definições das ferramentas. O log do Ollama tinha 35 desses eventos, vários
+datados de 01/09, **durante a calibração aprovada**. A rodada 2 só acertava
+quando o modelo chegava a `saude_do_pool` antes de estourar (~passo 4).
+No primeiro teste de retomada em 15/09, ela falhou: vagou para "banco de
+dados ou outro serviço" sem tocar nas ferramentas de domínio.
+
+**Correção:** `num_ctx: 16384` nas options (`agente/agente.py`). Custo:
+~2,6 GB de KV cache no 14b; a máquina tem 18 GB e a stack usa ~1 GB.
+Também: `export MODELO_OLLAMA ?= qwen3:14b` no Makefile — `make agente`
+rodava o 8b por padrão, diferente dos vídeos e da calibração.
+
+**Recalibração (5 execuções por rodada, 14b, incidente ativo):**
+
+| Rodada | Resultado | Tempo de modelo (quente) | Antes |
+|---|---|---|---|
+| 1 (sem contexto) | **5/5 erro bom**, nenhum citou o worker | 35–60s | 31–77s |
+| 2 (com contexto) | **5/5 acerto**, 4/5 citam a flag | 24–29s | 27–91s |
+
+Log do Ollama após a correção: `n_ctx_slot = 16384`, zero context shifts,
+maior prompt observado 4147 tokens (teria estourado antes). A rodada 2 ficou
+~3x mais rápida — sem o shift, o prompt não é reprocessado a cada passo — e
+passou a seguir o método à risca: loki → pool → locks → mudanças em 5/5.
+
+Efeito no palco: o passo 1 da rodada 2 leva ~45s processando o system
+prompt com contexto (primeira vez que o modelo o vê na sessão). É silêncio
+previsível; o roteiro cobre com fala. O pré-aquecimento precisa pedir
+`num_ctx=16384` no curl, senão o Ollama recarrega o modelo na rodada 1.
+
+Resultados: `resultados/20260915-180954-rodada2-qwen3_14b/` e
+`resultados/20260915-181416-rodada1-qwen3_14b/`.
