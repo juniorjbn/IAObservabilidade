@@ -1,8 +1,12 @@
 # Roteiro de palco — 30 minutos
 
-Minutagem construída sobre tempos MEDIDOS na calibração (não estimados):
-investigação da rodada 1 no 14b: 31–77s de modelo; rodada 2: 27–91s.
-Carga fria do 14b: ~37s — por isso o pré-aquecimento é inegociável.
+Minutagem construída sobre tempos MEDIDOS na calibração (não estimados),
+remedidos em 15/09 após corrigir o `num_ctx` (ver PROTOCOLO.md):
+rodada 1 no 14b: 35–60s de modelo; rodada 2: ~45s de silêncio no passo 1
+(processamento do prompt com contexto) + 24–29s de investigação.
+Carga fria do 14b: ~42s — por isso o pré-aquecimento é inegociável, e ele
+PRECISA pedir o mesmo `num_ctx` do agente, senão o Ollama recarrega o
+modelo no meio da rodada 1.
 
 ## Antes de subir (na sala, 30 min antes)
 
@@ -10,7 +14,8 @@ Carga fria do 14b: ~37s — por isso o pré-aquecimento é inegociável.
 make verificar               # ~70s; NÃO suba ao palco se falhar
 make curar                   # garante estado limpo
 curl -s http://localhost:11434/api/generate -d \
-  '{"model":"qwen3:14b","prompt":"ok","stream":false}' >/dev/null  # pré-aquece
+  '{"model":"qwen3:14b","prompt":"ok","stream":false,"options":{"num_ctx":16384}}' \
+  >/dev/null   # pré-aquece COM o num_ctx do agente (senão recarrega no palco)
 ```
 
 - [ ] Grafana aberto na aba do Explore (pool metric, refresh 5s, janela 5min)
@@ -28,10 +33,10 @@ curl -s http://localhost:11434/api/generate -d \
 | 02:30–05:00 | **O gap tem nome** | Gartner aposentou "AIOps Platforms" (03/2025). Thoughtworks: sem engenharia de contexto, vira chat sobre dados quebrados. Uma frase cada, slide único. |
 | 05:00–08:00 | **O ambiente** | Topologia na tela — SEM mostrar o worker no diagrama (ele aparece só na autópsia). Stack local, nada sai da máquina = argumento de ambiente regulado. Mostrar o comando do MCP com `-disable-write` e falar do portão humano. |
 | 08:00–09:00 | **O incidente** | `make incidente` ao vivo. Em seguida, o sintoma como o cliente sente: `curl -X POST localhost:8001/checkout` devolvendo o 503 cru na tela. Depois o Grafana: pool do inventory crava em 5, vazão despenca. "Isso é um plantão de verdade: 503 pro cliente, gráfico feio." |
-| 09:00–13:00 | **RODADA 1 — o erro** | `make agente`. Narrar os portões (Enter visível). Modelo leva ~45–80s no total; preencher com leitura das tool calls em voz alta. Diagnóstico: culpa o inventory-api. **Pausa. "Quem concorda com ele?"** Deixar a sala responder. |
+| 09:00–13:00 | **RODADA 1 — o erro** | `make agente`. Narrar os portões (Enter visível). Modelo leva ~35–60s no total; preencher com leitura das tool calls em voz alta. Diagnóstico: culpa o inventory-api. **Pausa. "Quem concorda com ele?"** Deixar a sala responder. |
 | 13:00–16:00 | **Autópsia** | O dado existia DESDE O INÍCIO: mostrar no Grafana o pool metric e os logs do worker (que o agente nunca consultou — não sabia que existiam). Revelar o worker no diagrama. "Não é burrice do modelo. É o que qualquer plantonista novo faria sem contexto." |
 | 16:00–17:00 | **A injeção** | `cat contexto/mapa-do-ambiente.md` e `metodo-de-investigacao.md` na tela, rolagem rápida. "Quatro coisas: mapa, método, ferramentas de domínio, mudanças recentes. Zero RAG, zero fine-tuning, zero modelo novo." |
-| 17:00–21:00 | **RODADA 2 — o acerto** | `make agente-r2`. Os portões agora mostram `saude_do_pool`, `quem_esta_segurando_locks`, `mudancas_recentes`. Diagnóstico nomeia o worker, a flag e os locks. `make curar`, gráfico volta ao vivo. |
+| 17:00–21:00 | **RODADA 2 — o acerto** | `make agente-r2`. **Passo 1 demora ~45s em silêncio** (o modelo está lendo o mapa do ambiente pela primeira vez) — cobrir com a fala: "agora ele está lendo o que eu escrevi". Depois disso, ~25s. Os portões agora mostram `saude_do_pool`, `quem_esta_segurando_locks`, `mudancas_recentes`. Diagnóstico nomeia o worker, a flag e os locks. `make curar`, gráfico volta ao vivo. |
 | 21:00–23:00 | **Kicker (cortável)** | Slide: as baterias de calibração. "Isso foi o 14b. O 8b — metade do tamanho — também acerta com contexto: 9 de 10. Sem contexto, o mesmo 8b: zero de dez." Não foi o modelo que cresceu. |
 | 23:00–26:30 | **O que isso custa** | PACE-LM: "pesquisadores da Microsoft construíram um estimador de confiança porque o modelo não sabe quando não sabe" (calibração, ~1/3 do erro). Roy et al.: ferramenta bate documento. Engenharia de contexto ≠ RAG. Humano no portão não é enfeite: é o design. |
 | 26:30–27:30 | **Fechamento** | Três frases, sem slide: (1) A IA não resolveu o incidente. (2) Quem aprovou cada passo dela, e quem reverte a configuração, é você. (3) O que ela entregou foi o detalhe que você não tinha visto — um worker que não aparece em nenhum trace. |

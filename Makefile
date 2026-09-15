@@ -48,6 +48,10 @@ logs:  ## Acompanha os logs dos serviços da aplicação
 painel:  ## Abre o Grafana
 	@python3 -c "import webbrowser; webbrowser.open('http://localhost:3000')"
 
+# Modelo do palco. Os vídeos do plano B e a calibração rodaram com 14b;
+# sem isto, o agente cai no padrão do código (8b) e a rodada 1 vaga.
+export MODELO_OLLAMA ?= qwen3:14b
+
 agente:  ## Rodada 1: agente investiga SEM contexto de ambiente
 	agente/.venv/bin/python agente/agente.py
 
