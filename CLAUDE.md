@@ -153,7 +153,8 @@ quebra parse de JSON. Consultas à API do Grafana devem escrever em arquivo
 
 ## Prazo, cronograma e fechamento (acordados em 31/08/2026)
 
-**Palestra: TDC São Paulo, ~14/09/2026** (duas semanas a partir de 31/08).
+**Palestra: TDC São Paulo, 23/09/2026** (data confirmada em 15/09; a
+estimativa anterior de ~14/09 estava errada).
 
 - Semana 1 (até 06/09): código — calibração (etapa 3) e contexto (etapa 4).
   Se o qwen3:8b não der conta do loop, trocar de modelo até quarta 02/09.
@@ -168,21 +169,20 @@ que não aparece em nenhum trace. O título vira a última fala.
 Nota de palco: pré-aquecer o modelo antes de subir (o passo frio leva ~25s;
 quente, 1,6–3,1s por passo).
 
-## Pendências ao pausar (03/09/2026)
+## Estado em 15/09/2026 (retomada após 12 dias)
 
-Nenhuma técnica; três humanas:
+**IBM resolvido (15/09):** o roteiro fica como está. Nada de SevOne/NI, nem
+slide de aterrissagem, nem menção. A demo segue 100% open source.
 
-1. **Conversa com o gestor IBM (04/09)** sobre envolver SevOne/Network
-   Intelligence. Recomendação já dada: manter a demo open source; slide de
-   aterrissagem ("o critério para avaliar qualquer fornecedor, inclusive o
-   meu") está SEGURADO até o desfecho. Fato verificado que ajuda: o NI tem
-   servidor MCP nativo (documentação SaaS). Trocar a demo por produto =
-   recomeçar ~80% e contradizer o resumo aceito pelo TDC.
-2. **Dois ensaios cronometrados** — a minutagem do roteiro é hipótese.
-3. **Slides/identidade visual** — nunca entrou neste repositório.
+Pendências restantes, todas de palco, nenhuma técnica:
+
+1. **Slides** — João vai gerar. Nunca entraram neste repositório.
+2. **Dois ensaios cronometrados** — a minutagem do roteiro ainda é hipótese.
+3. **Sanidade da stack após 12 dias parada** — `make verificar` antes do
+   primeiro ensaio (imagens Docker, modelo no Ollama, Tempo MCP).
 
 Grafo de conhecimento (graphify-out/) desatualizado desde 31/08 — rodar
-`/graphify . --update` na retomada.
+`/graphify . --update` quando houver folga; não é caminho crítico.
 
 ## Como trabalhar aqui
 
