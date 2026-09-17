@@ -1,0 +1,80 @@
+{
+  "rodada": "rodada1-qwen3_14b",
+  "quando": "20260917-173637",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "erro_bom",
+      "diagnostico": "Hipótese: O checkout-api está retornando erros 503, o que pode estar relacionado a falhas em serviços dependentes, como o inventory-api. Procuro: Verificar se há falhas ou latência no serviço inventory-api que possam est",
+      "parede_s": 230.3,
+      "tempo_modelo_s": 228.1,
+      "passos": 3,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Hipótese: O checkout-api pode estar enfrentando falhas no serviço ou alta latência em algum componente dependente. Procuro: Identificar os valores específicos dos rótulos para filtrar logs do checkout-api e investigar po",
+      "parede_s": 62.5,
+      "tempo_modelo_s": 59.3,
+      "passos": 3,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "erro_bom",
+      "diagnostico": "Hipótese: Os logs do checkout-api podem conter informações detalhadas sobre os erros 503, incluindo possíveis causas como falhas de conexão ou exceções no código. Procuro: Consultar logs do checkout-api para identificar ",
+      "parede_s": 57.2,
+      "tempo_modelo_s": 55.4,
+      "passos": 3,
+      "ferramentas": [
+        "traceql-search",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "erro_bom",
+      "diagnostico": "Hipótese: As traces indicam que o checkout-api está gerando traces com durações muito curtas, possivelmente devido a falhas rápidas ou interrupções no serviço, e há interações com o inventory-api, que também pode estar c",
+      "parede_s": 309.4,
+      "tempo_modelo_s": 300.4,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Hipótese: O checkout-api pode estar enfrentando falhas no serviço ou alta latência devido a problemas upstream. Procuro: Identificar se há falhas recentes no serviço checkout-api ou se há latência em dependências.",
+      "parede_s": 128.7,
+      "tempo_modelo_s": 126.2,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "traceql-search"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "erro_bom": 3,
+    "revisar_manualmente": 2
+  },
+  "meta": ">= 8/10 erro_bom"
+}

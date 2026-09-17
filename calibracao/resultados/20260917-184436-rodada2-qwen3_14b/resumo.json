@@ -1,0 +1,52 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-184436",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está executando transações longas devido à flag reconciliacao.backfill=true, causando bloqueios no Postgres e resultando em conexões esgotadas no pool do inventory-api. Isso leva ao erro 5",
+      "parede_s": 99.0,
+      "tempo_modelo_s": 78.3,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de queries longas (SELECT pg_sleep(20)), causando congestionamento no pool de conexões do inventory-api. Isso resulta em requisições do chec",
+      "parede_s": 166.3,
+      "tempo_modelo_s": 133.8,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados, causando atrasos no inventory-api, que por sua vez está causando erros 503 no checkout-api. A configuração reconciliacao.backfill=true está ativando",
+      "parede_s": 174.0,
+      "tempo_modelo_s": 135.9,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 3
+  },
+  "meta": ">= 9/10 acerto"
+}

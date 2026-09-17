@@ -1,0 +1,89 @@
+{
+  "rodada": "rodada1-qwen3_14b",
+  "quando": "20260917-182029",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o serviço `inventory-api` está retornando erros HTTP 503 (Serviço Indisponível) ao tentar reservar SKUs, o que está causando falhas no `checkout-api`. Isso sugere que o `inventory-api` po",
+      "parede_s": 219.2,
+      "tempo_modelo_s": 138.5,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_loki_logs",
+        "list_loki_label_names",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "erro_bom",
+      "diagnostico": "O checkout-api está retornando erro 503 devido a falhas no serviço inventory-api ao tentar reservar SKUs. Isso indica que o inventory-api está indisponível ou está retornando erros ao processar as solicitações de reserva",
+      "parede_s": 97.0,
+      "tempo_modelo_s": 66.7,
+      "passos": 5,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "list_loki_label_names",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é um timeout ao tentar reservar estoque no serviço `inventory-api` a partir do `checkout-api`. Isso está resultando em erros 503 (Serviço Indisponível) para os clientes. A origem do problema pa",
+      "parede_s": 94.2,
+      "tempo_modelo_s": 57.4,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_loki_logs",
+        "list_loki_label_names",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o serviço `inventory-api` está retornando erros HTTP 503 (Servidor Indisponível) ao tentar reservar SKUs, o que está causando falhas no `checkout-api`. Isso sugere que o `inventory-api` p",
+      "parede_s": 106.5,
+      "tempo_modelo_s": 67.5,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_loki_logs",
+        "list_loki_label_names",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o serviço `inventory-api` está retornando erros HTTP 503 (Serviço Indisponível) ao tentar reservar SKUs, o que está causando falhas no `checkout-api`. Isso indica que o `inventory-api` po",
+      "parede_s": 116.4,
+      "tempo_modelo_s": 76.7,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_loki_logs",
+        "list_loki_label_names",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "erro_bom": 5
+  },
+  "meta": ">= 8/10 erro_bom"
+}
