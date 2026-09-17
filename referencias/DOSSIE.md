@@ -362,3 +362,95 @@ que sobrevive à troca de modelo.
    usar a lista completa.
 5. **OTel GenAI**: status re-verificado em 31/08/2026 (zero releases). Marcar
    re-verificação na véspera da palestra.
+
+---
+
+## Objeções à demo (não às referências)
+
+Levantadas em 17/09 pensando como o sênior mais cético da plateia. Cada uma
+com a resposta curta. As três primeiras são fraquezas reais; as demais têm
+resposta pronta. Decisão de João (17/09): **não** haverá segundo incidente —
+a objeção 1 é respondida com a ablação e o fraseado.
+
+### 1. "Você escreveu o contexto sabendo a resposta."
+O mapa diz "a tabela `inventory` tem mais de um escritor; não esqueça
+workers". É quase o post-mortem.
+**Resposta:** "Sim, e eu quis testar exatamente isso. Dei ao agente só o mapa,
+com o worker desenhado e essa dica, sem método e sem ferramenta de domínio:
+zero de cinco. Ele leu que o worker existia e não foi olhar. Saber a resposta
+não bastou; o que fechou o gap foi o método e a ferramenta que responde
+'quem está segurando lock' numa chamada." (`calibracao/ABLACAO.md`, condição B.)
+**Limite honesto:** é um incidente só. O contexto não foi testado contra um
+incidente diferente. Se perguntarem: "não testei; é o próximo passo e é o teste
+que vale."
+
+### 2. "Um modelo de fronteira acharia o worker na rodada 1."
+**Resposta:** "Não testei com modelo de fronteira. Pode ser que ache — um
+modelo forte explora mais. O argumento não é que a IA é burra; é que você não
+deve depender de sorte de exploração às 2h da manhã, e em ambiente regulado o
+modelo de fronteira nem entra na sala. O contexto escrito serve qualquer
+modelo, inclusive o que ainda vai sair."
+
+### 3. "Doze Enters às 2h da manhã é teatro."
+**Resposta:** "É. Na calibração rodou sem ninguém apertando nada. Portão em
+leitura é configurável; em escrita é inegociável. Está visível aqui para vocês
+verem o mecanismo. O design é o portão existir na fronteira que você escolher."
+
+### 4. "Isso é um alerta em `backfill=true`. Você não precisa de IA."
+**Resposta:** "Depois do fato, todo incidente tem um alerta óbvio. O agente
+vale no que você não previu. Este eu previ porque desenhei — e é por isso que
+o valor da demo é o mecanismo, não este incidente."
+
+### 5. "Contexto desatualizado é pior que nenhum."
+**Resposta:** "Verdade, e é a melhor objeção da noite. Contexto é código: vive
+no repositório, passa por PR, e a bateria de calibração é a suíte de testes
+dele. Mudou o mapa, roda dez execuções. Eu fiz isso esta semana: duas linhas
+no método levaram a rodada 2 de 5/8 para 10/10. Sem bateria, eu não saberia."
+
+### 6. "Runbook automation existe há 15 anos."
+**Resposta:** "Sim. A diferença é que quem executa agora lê log em linguagem
+natural e desvia quando a evidência manda. E a ablação mostra o outro lado:
+runbook apontando para ferramenta que não existe faz o agente desistir em
+duas chamadas. Qualidade do runbook importa mais, não menos."
+
+### 7. "Prompt injection: log é texto do atacante e entra no contexto."
+**Resposta:** "Boa. Com ferramentas somente-leitura, o raio de dano de uma
+injeção é desinformação — diagnóstico errado — não ação. E o portão é a
+segunda fronteira. Read-only não é só compliance; é limite de blast radius."
+
+### 8. "As ferramentas de domínio são feitas para este incidente."
+**Resposta:** "`quem_esta_segurando_locks` é `pg_stat_activity`, genérico para
+qualquer Postgres. `saude_do_pool` lê métricas padrão de pool. A única 'de
+demo' é `mudancas_recentes`, que em produção seria a API do ArgoCD ou do seu
+deploy." Admitir a terceira.
+
+### 9. "n=5 é amostra de brinquedo."
+**Resposta:** "Sim. Os números completos: 0 em 90 sem contexto; 10/10 na
+configuração final, com o mesmo caminho nas dez. O que importa é a diferença,
+não o intervalo de confiança."
+
+### 10. "Você calibrou o prompt para errar bonito."
+**Resposta:** "O prompt base ensina sintaxe de LogQL e TraceQL, e é o mesmo
+nas duas rodadas. O que muda é só o que entra depois dele. Se a calibração
+fosse para errar, a rodada 2 erraria também."
+
+### 11. "Qwen é chinês; em regulado não entra."
+**Resposta:** "Os pesos rodam locais, sem rede — mas a objeção é política, e eu
+respeito. Troca por Llama, Gemma ou Mistral: o contexto sobrevive à troca. Esse
+é o ponto. O contexto é o ativo; o modelo é commodity."
+
+### 12. "Ninguém roda modelo no notebook com acesso ao Grafana em produção."
+**Resposta:** "É demo do padrão. Em produção vira um serviço com service
+account próprio, Viewer — aqui estou com admin, porque é demo, e é por isso
+que a flag `-disable-write` está segurando sozinha."
+
+### 13. "O Grafana já tem Assistant com IA."
+**Resposta:** "É cloud, e o ponto da palestra não é a ferramenta, é o que você
+alimenta nela. Qualquer assistente cai na rodada 1 sem o seu contexto."
+
+### 14. "Com um service map do Istio ou do Jaeger a IA veria o worker."
+**Resposta:** "Service map mostra quem chama quem por HTTP. Worker batch
+falando SQL é o ponto cego clássico — não aparece. E mesmo dando o mapa
+completo ao agente, com o worker desenhado: zero de cinco. Ver o componente
+não é saber que ele está segurando lock. Isso está no `pg_stat_activity`,
+que não está em nenhuma ferramenta de observabilidade."
