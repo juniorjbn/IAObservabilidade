@@ -37,6 +37,9 @@ services:
     # Config original do container + servidor MCP do Tempo habilitado.
     volumes:
       - ./lgtm/tempo-config.yaml:/otel-lgtm/tempo-config.yaml:ro
+      # Dashboard da demo, provisionado por arquivo (sobrevive ao `down -v`).
+      - ./lgtm/grafana-dashboards-demo.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/demo.yaml:ro
+      - ./lgtm/dashboard-loja.json:/otel-lgtm/grafana-dashboard-loja.json:ro
     environment:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
