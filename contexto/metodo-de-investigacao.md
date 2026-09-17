@@ -3,9 +3,13 @@
 Siga NESTA ordem. Cada passo tem uma ferramenta preferida.
 
 1. **Confirme o sintoma e delimite o raio.** Erros 503 no checkout-api:
-   veja nos logs (`query_loki_logs`, label `service_name`) QUEM devolve o
-   erro original — o serviço que alerta raramente é o que causa.
-2. **Saúde dos pools no caminho.** Use `saude_do_pool`. Pool cravado na
+   veja nos logs QUEM devolve o erro original — o serviço que alerta
+   raramente é o que causa. Query: `{service_name="checkout-api"}`, SEM
+   filtro de texto (as mensagens são em português e o nível é label, não
+   texto — `|= "error"` volta vazio). Se vier vazio, não depure a query:
+   siga para o passo 2.
+2. **Saúde dos pools no caminho.** SEMPRE, logo após o passo 1, chame
+   `saude_do_pool` — antes de qualquer outra consulta. Pool cravado na
    capacidade com esgotamentos subindo = conexões presas, quase sempre
    esperando lock ou query lenta.
 3. **Quem mais escreve no mesmo banco?** Consulte o mapa do ambiente. Não

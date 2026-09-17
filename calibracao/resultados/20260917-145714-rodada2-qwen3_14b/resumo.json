@@ -1,0 +1,75 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-145714",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 43.3,
+      "tempo_modelo_s": 42.0,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 30.6,
+      "tempo_modelo_s": 29.5,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 29.7,
+      "tempo_modelo_s": 28.5,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 29.3,
+      "tempo_modelo_s": 28.3,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "falha_de_modelo",
+      "diagnostico": "(diagnóstico vazio)",
+      "parede_s": 29.6,
+      "tempo_modelo_s": 28.5,
+      "passos": 8,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "falha_de_modelo": 5
+  },
+  "meta": ">= 9/10 acerto"
+}

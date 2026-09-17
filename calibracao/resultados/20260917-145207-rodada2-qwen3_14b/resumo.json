@@ -1,0 +1,75 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-145207",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Não há informações suficientes para concluir a causa raiz com base no que foi coletado até o momento. É necessário investigar mais profundamente, analisando logs, métricas e traces para identificar o problema.",
+      "parede_s": 68.8,
+      "tempo_modelo_s": 67.4,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Não há informações suficientes para concluir a causa raiz com base no que foi coletado até o momento. É necessário investigar mais profundamente utilizando as ferramentas disponíveis.",
+      "parede_s": 17.7,
+      "tempo_modelo_s": 16.4,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Não há informações suficientes para concluir a causa raiz com base nos dados coletados até o momento. É necessário investigar mais profundamente, analisando logs e métricas específicas dos serviços envolvidos.",
+      "parede_s": 20.8,
+      "tempo_modelo_s": 19.2,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Não há informações suficientes para determinar a causa raiz com base apenas no que foi coletado até o momento. É necessário investigar mais profundamente utilizando as ferramentas disponíveis.",
+      "parede_s": 18.8,
+      "tempo_modelo_s": 17.6,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "revisar_manualmente",
+      "diagnostico": "Não há informações suficientes para determinar a causa raiz do erro 503 no checkout-api com base nas ferramentas utilizadas até o momento. É necessário investigar mais profundamente, analisando logs, métricas e traces pa",
+      "parede_s": 17.8,
+      "tempo_modelo_s": 16.5,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "list_loki_label_names"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "revisar_manualmente": 5
+  },
+  "meta": ">= 9/10 acerto"
+}

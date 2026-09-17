@@ -1,0 +1,87 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-151132",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados, causando atrasos no inventory-api, que por sua vez está causando o erro 503 no checkout-api. A evidência é a presença de transações longas no reconc",
+      "parede_s": 40.5,
+      "tempo_modelo_s": 38.8,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "O checkout-api está devolvendo erro 503 devido ao fato de que o reconciliation-worker está segurando locks no banco de dados por um período prolongado, causando atrasos no inventory-api. Isso está acontecendo porque a fl",
+      "parede_s": 31.8,
+      "tempo_modelo_s": 30.2,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está segurando locks no banco de dados por um período prolongado devido à execução de transações longas ativadas pela flag `reconciliacao.backfill=true`. Isso está causando congestiona",
+      "parede_s": 31.0,
+      "tempo_modelo_s": 29.7,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de consultas como `SELECT pg_sleep(20)`, causando bloqueios no inventory-api. Isso resulta em conexões presas no pool do inventory-api, que ",
+      "parede_s": 29.4,
+      "tempo_modelo_s": 28.0,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está segurando um lock no banco de dados por meio de uma query `SELECT pg_sleep(20)`, que está causando atrasos no **inventory-api**. Isso está resultando no esgotamento do pool de con",
+      "parede_s": 32.8,
+      "tempo_modelo_s": 31.6,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 5
+  },
+  "meta": ">= 9/10 acerto"
+}
