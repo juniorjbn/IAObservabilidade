@@ -1,0 +1,9 @@
+apiVersion: 1
+
+# Dashboard da demo, provisionado por arquivo: sobrevive a `make reiniciar`.
+providers:
+  - name: "Loja — demo TDC"
+    type: file
+    options:
+      path: /otel-lgtm/grafana-dashboard-loja.json
+      foldersFromFilesStructure: false
