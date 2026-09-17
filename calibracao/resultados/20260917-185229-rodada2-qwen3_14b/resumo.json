@@ -1,0 +1,52 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-185229",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de transações longas, causando atrasos no inventory-api. Isso resulta em erros 503 no checkout-api, pois as atualizações de estoque estão se",
+      "parede_s": 72.5,
+      "tempo_modelo_s": 42.9,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço **reconciliation-worker** está causando o erro 503 no **checkout-api** devido a transações longas no **Postgres**. A configuração `reconciliacao.backfill=true` foi ativada, resultando em operações de backfill q",
+      "parede_s": 89.3,
+      "tempo_modelo_s": 54.4,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de transações longas, causando congestionamento no pool de conexões do inventory-api. Isso resulta em requisições do checkout-api sendo bloq",
+      "parede_s": 74.8,
+      "tempo_modelo_s": 40.4,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 3
+  },
+  "meta": ">= 9/10 acerto"
+}

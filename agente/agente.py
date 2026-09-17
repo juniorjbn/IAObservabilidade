@@ -262,6 +262,109 @@ def portao_humano(nome: str, args: dict, auto: bool) -> bool:
     return resposta != "n"
 
 
+def resumir_resultado(texto: str, max_linhas: int = 3, largura: int = 110) -> list[str]:
+    """Poucas linhas legíveis do que a ferramenta devolveu — para o telão.
+
+    Sem isso a plateia vê "executado (7796 chars)" e a investigação parece
+    texto colado. Com isso, vê o dado entrando.
+    """
+    try:
+        dados = json.loads(texto)
+    except (ValueError, TypeError):
+        dados = None
+    linhas: list[str] = []
+    if isinstance(dados, dict) and isinstance(dados.get("datasources"), list):
+        nomes = [f"{d.get('name')} ({d.get('type')})" for d in dados["datasources"]]
+        linhas.append(f"{len(nomes)} datasources: " + ", ".join(nomes))
+    elif isinstance(dados, dict) and isinstance(dados.get("traces"), list):
+        tr = dados["traces"]
+        linhas.append(f"{len(tr)} trace(s); os primeiros:")
+        for t in tr[:max_linhas - 1]:
+            linhas.append(f"  {t.get('rootServiceName')} {t.get('rootTraceName')} · {t.get('durationMs')}ms")
+    elif isinstance(dados, list) and dados and all(isinstance(x, str) for x in dados):
+        linhas.append(f"{len(dados)} labels: " + ", ".join(dados))
+    elif isinstance(dados, dict) and isinstance(dados.get("data"), list):
+        itens = dados["data"]
+        if itens and isinstance(itens[0], dict) and "line" in itens[0]:
+            linhas.append(f"{len(itens)} linha(s) de log; as mais recentes:")
+            linhas += [f"  {i['line']}" for i in itens[:max_linhas - 1]]
+        elif itens and isinstance(itens[0], dict) and "metric" in itens[0]:
+            for i in itens[:max_linhas]:
+                m = i["metric"]; v = i.get("value", i.get("values", ["", "?"]))
+                val = v[1] if isinstance(v, list) and len(v) == 2 and not isinstance(v[0], list) else v[-1][1] if isinstance(v, list) and v else "?"
+                linhas.append(f"  {m.get('service_name') or m.get('__name__') or m} = {val}")
+        elif not itens:
+            linhas.append("(nenhum resultado)" + (f" — {dados['hints'].get('summary', '')}" if isinstance(dados.get("hints"), dict) else ""))
+    if not linhas:
+        brutas = [l.rstrip() for l in texto.splitlines() if l.strip()]
+        if len(brutas) > 1:  # texto tabular (ferramentas de domínio): linhas como vieram
+            linhas = brutas[:max_linhas]
+        else:
+            plano = " ".join(texto.split())
+            linhas = [plano[i:i + largura] for i in range(0, min(len(plano), largura * max_linhas), largura)]
+    return [l[:largura] for l in linhas[:max_linhas]]
+
+
+PERGUNTA_NARRACAO = (
+    "Em no máximo duas linhas curtas, em português, no formato exato\n"
+    "Hipótese: <o que você acha que está acontecendo>\n"
+    "Procuro: <o que espera descobrir com a chamada que você acabou de pedir>\n"
+    "Não chame ferramentas, não repita a chamada, não explique mais nada."
+)
+
+
+# Chamadas que não merecem narração: são inventário, não hipótese. Cada
+# narração custa 5–30s (reprocessamento de prompt); a rodada 1 cai de 5 para 3.
+SEM_NARRACAO_PARA = {"list_datasources", "list_loki_label_names"}
+
+
+def narrar_chamada(mensagens: list, msg_assistente: dict, tools: list) -> str:
+    """Pede ao modelo, fora da investigação, por que vai fazer esta chamada.
+
+    A pergunta é lateral: a resposta NÃO entra no histórico da investigação,
+    então o comportamento calibrado fica intocado. Custa ~3s por passo. Pedir
+    isso dentro do prompt principal quebrou a calibração (17/09): o modelo
+    passava a narrar em vez de chamar.
+    """
+    if os.getenv("SEM_NARRACAO"):
+        return ""
+    nomes = {c["function"]["name"] for c in (msg_assistente.get("tool_calls") or [])}
+    if nomes and nomes <= SEM_NARRACAO_PARA:
+        return ""
+    inicio = time.monotonic()
+    try:
+        corpo = requests.post(f"{OLLAMA}/api/chat", timeout=60, json={
+            "model": MODELO, "stream": False, "think": False,
+            # As MESMAS tools da investigação: elas ficam no começo do prompt
+            # renderizado; sem elas o prefixo muda desde o primeiro token e o
+            # Ollama reprocessa os ~4k tokens inteiros (35–40s por passo,
+            # medido em 17/09). Com elas, só o sufixo é novo.
+            "tools": tools,
+            "messages": mensagens + [msg_assistente,
+                                     {"role": "user", "content": PERGUNTA_NARRACAO}],
+            "options": {"temperature": 0.2, "num_ctx": 16384, "num_predict": 60},
+        }).json()
+        texto = (corpo.get("message", {}).get("content") or "").strip()
+        if corpo.get("message", {}).get("tool_calls"):
+            texto = ""  # tentou chamar ferramenta em vez de narrar: fica sem narração
+        return f"{texto}\n{CINZA}(narração: {time.monotonic() - inicio:.1f}s){FIM}" if texto else ""
+    except Exception:  # noqa: BLE001 — narração nunca pode derrubar a demo
+        return ""
+
+
+def mostrar_narracao(msg: dict) -> None:
+    """Imprime o raciocínio que veio junto com a chamada (Hipótese/Procuro)."""
+    pensamento = (msg.get("thinking") or "").strip()
+    if pensamento:
+        resumo = " ".join(pensamento.split())
+        print(f"{CINZA}💭 {resumo[:400]}{'…' if len(resumo) > 400 else ''}{FIM}")
+    texto = (msg.get("content") or "").strip()
+    for linha in texto.splitlines():
+        linha = linha.strip()
+        if linha:
+            print(f"{NEGRITO}{linha}{FIM}")
+
+
 def chamar_ollama(mensagens: list, tools: list, pensar: bool = False) -> dict:
     inicio = time.monotonic()
     resposta = requests.post(f"{OLLAMA}/api/chat", timeout=300, json={
@@ -379,11 +482,16 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
                           f"em {passo} passo(s){FIM}")
                     return
 
+                print(f"\n{CINZA}passo {passo} · modelo pensou por "
+                      f"{corpo['_segundos']:.1f}s{FIM}")
+                mostrar_narracao(msg)
+                narracao = narrar_chamada(mensagens, msg, tools_ollama)
+                for linha in narracao.splitlines():
+                    if linha.strip():
+                        print(linha.strip() if linha.startswith(CINZA) else f"{NEGRITO}{linha.strip()}{FIM}")
                 for chamada in chamadas:
                     nome = chamada["function"]["name"]
                     args = chamada["function"].get("arguments") or {}
-                    print(f"\n{CINZA}passo {passo} · modelo pensou por "
-                          f"{corpo['_segundos']:.1f}s{FIM}")
 
                     if nome not in nomes_validos:
                         resultado = f"ferramenta desconhecida: {nome}"
@@ -409,6 +517,8 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
                         print(f"{VERDE}✓ executado{FIM} "
                               f"{CINZA}({len(resultado)} chars"
                               f"{', cortado' if len(resultado) > LIMITE_SAIDA else ''}){FIM}")
+                    for linha in resumir_resultado(resultado):
+                        print(f"{CINZA}  │ {linha}{FIM}")
                     mensagens.append({"role": "tool", "tool_name": nome,
                                       "content": truncar(resultado)})
 

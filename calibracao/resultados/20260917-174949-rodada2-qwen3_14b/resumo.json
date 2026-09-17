@@ -1,0 +1,161 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-174949",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "Hipótese: A configuração `reconciliacao.backfill=true` foi recentemente aplicada no reconciliation-worker, o que provavelmente ativou o modo de backfill com transações longas, causando bloqueios no banco de dados e esgot",
+      "parede_s": 518.4,
+      "tempo_modelo_s": 514.0,
+      "passos": 7,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "Diagnóstico: A configuração `reconciliacao.backfill=true` foi recentemente aplicada no reconciliation-worker, ativando o modo de backfill com transações longas. Isso está causando consultas demoradas (como `SELECT pg_sle",
+      "parede_s": 354.1,
+      "tempo_modelo_s": 350.7,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está executando transações longas no PostgreSQL, bloqueando o inventory-api e esgotando o pool de conexões, o que resulta em erros 503 no checkout-api. A configuração `reconciliacao.backfi",
+      "parede_s": 172.7,
+      "tempo_modelo_s": 168.0,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está executando transações longas devido à flag `reconciliacao.backfill=true`, o que está causando bloqueios no Postgres e esgotando o pool de conexões do inventory-api. Isso resulta no er",
+      "parede_s": 166.0,
+      "tempo_modelo_s": 161.8,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "acerto_precoce",
+      "diagnostico": "Hipótese: O esgotamento do pool de conexões no inventory-api pode estar relacionado a operações de atualização demoradas no banco de dados, especialmente durante a concorrência de requisições. Procuro: Verificar se há al",
+      "parede_s": 78.7,
+      "tempo_modelo_s": 74.7,
+      "passos": 4,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 6,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está causando o bloqueio no Postgres devido à execução de transações longas (ativadas pela flag `reconciliacao.backfill=true`) que estão travando o inventory-api. Isso resulta no esgotamen",
+      "parede_s": 112.8,
+      "tempo_modelo_s": 109.1,
+      "passos": 6,
+      "ferramentas": [
+        "query_loki_logs",
+        "list_datasources",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 7,
+      "classe": "acerto_precoce",
+      "diagnostico": "Diagnóstico: O reconciliation-worker está executando transações longas devido à flag `reconciliacao.backfill=true`, causando bloqueios no banco de dados e esgotando o pool de conexões do inventory-api, resultando em erro",
+      "parede_s": 74.9,
+      "tempo_modelo_s": 71.6,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 8,
+      "classe": "acerto_precoce",
+      "diagnostico": "Hipótese: A ativação da flag `reconciliacao.backfill=true` no reconciliation-worker pode estar causando transações longas no banco de dados, impactando o inventory-api. Procuro: Verificar se o reconciliation-worker está ",
+      "parede_s": 59.1,
+      "tempo_modelo_s": 57.3,
+      "passos": 5,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 9,
+      "classe": "acerto_precoce",
+      "diagnostico": "Hipótese: O reconciliation-worker está executando consultas que bloqueiam o inventory-api, causando o esgotamento do pool de conexões e resultando em erros 503 no checkout-api. Procuro: Verificar se houve mudanças recent",
+      "parede_s": 33.7,
+      "tempo_modelo_s": 32.2,
+      "passos": 4,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 10,
+      "classe": "erro_bom",
+      "diagnostico": "Hipótese: Como não há bloqueios de lock no banco de dados, o problema pode estar relacionado a uma sobrecarga no inventory-api devido a operações lentas ou a um grande número de requisições. Procuro: Verificar se houve m",
+      "parede_s": 40.5,
+      "tempo_modelo_s": 38.9,
+      "passos": 4,
+      "ferramentas": [
+        "query_loki_logs",
+        "saude_do_pool",
+        "quem_esta_segurando_locks"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 9,
+    "erro_bom": 1
+  },
+  "meta": ">= 9/10 acerto"
+}

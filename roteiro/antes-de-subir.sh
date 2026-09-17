@@ -6,6 +6,22 @@ cd "$(dirname "$0")/.."
 
 V="\033[32m✔\033[0m"; X="\033[31m✘\033[0m"
 
+echo "0/6  Memória: o modelo precisa de ~11 GB dos 18"
+# Em 17/09 uma bateria foi morta pelo macOS por falta de memória: Kokoro do
+# VoiceMode (6,5 GB) + VM do Docker Desktop configurada com 8 GB + Chrome.
+if pgrep -f "voicemode/services/(kokoro|whisper)" >/dev/null; then
+  echo -e "  $X VoiceMode ligado (Kokoro/Whisper ~7 GB). Rode: voicemode service stop kokoro; voicemode service stop whisper"; exit 1
+fi
+DOCKER_MIB=$(grep -oi '"memorymib": *[0-9]*' ~/Library/Group\ Containers/group.com.docker/settings-store.json 2>/dev/null | grep -o '[0-9]*$')
+if [ -n "$DOCKER_MIB" ] && [ "$DOCKER_MIB" -gt 4096 ]; then
+  echo -e "  \033[33m!\033[0m Docker Desktop reserva ${DOCKER_MIB} MiB; os containers usam ~1,7 GB. Settings > Resources > Memory: 4 GB"
+fi
+LIVRE=$(memory_pressure 2>/dev/null | grep -o 'free percentage: [0-9]*' | grep -o '[0-9]*$')
+if [ -n "$LIVRE" ] && [ "$LIVRE" -lt 25 ]; then
+  echo -e "  $X só ${LIVRE}% de memória livre. Feche Chrome (deixe 1 aba), IDEs, Serviio."; exit 1
+fi
+echo -e "  $V ${LIVRE:-?}% livre, VoiceMode parado"
+
 echo "1/6  Stack de pé?"
 docker compose ps --format '{{.Name}} {{.Status}}' | grep -q "lgtm.*healthy" || { echo -e "  $X lgtm não está healthy — make subir"; exit 1; }
 echo -e "  $V"
