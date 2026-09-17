@@ -185,10 +185,17 @@ Pendências restantes, todas de palco, nenhuma técnica:
    `num_ctx=16384` + `MODELO_OLLAMA` no Makefile; recalibrado 5/5 nas duas
    rodadas. Detalhes em `calibracao/PROTOCOLO.md`, seção 15/09.
 
-4. **Credencial do agente no Grafana é `admin/admin`** (`agente.py:57`),
-   mas a fala e o slide 6 afirmam "service account Viewer" como segunda
-   camada. Decisão pendente de João (17/09): criar o service account Viewer
-   e trocar a credencial, ou tirar a afirmação da fala.
+4. **Credencial do agente no Grafana é `admin/admin`** — decisão de João
+   (17/09): fica assim, é demo. A fala e o slide 6 NÃO podem afirmar
+   "service account Viewer"; dizer "somente leitura no servidor MCP"
+   (`-disable-write`). Ajuste de fraseado pendente em SLIDES.md e FALA.
+
+**17/09 — rodada 2 era bi-estável (5/8); método v2 → 10/10.** O passo 1 do
+método levava o modelo a uma query vazia cujas "dicas" o desviavam do método.
+Duas linhas no `metodo-de-investigacao.md` resolveram: 10/10, caminho idêntico,
+~20s. Regra nova: **bateria de 10** na configuração final antes do palco, e
+após qualquer mudança em `contexto/`. Ablação respondendo à objeção do
+service map em `calibracao/ABLACAO.md` (só o mapa: 0/5).
 
 Demo ao vivo roda com **doitlive** (`roteiro/demo.sh`); checklist automático
 em `roteiro/antes-de-subir.sh`; `roteiro/grafana.sh pool|worker` abre o

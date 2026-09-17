@@ -111,3 +111,39 @@ previsível; o roteiro cobre com fala. O pré-aquecimento precisa pedir
 
 Resultados: `resultados/20260915-180954-rodada2-qwen3_14b/` e
 `resultados/20260915-181416-rodada1-qwen3_14b/`.
+
+
+## 17/09/2026 — Rodada 2 bi-estável; método v2; ablação
+
+**Achado:** a configuração do palco (14b, mapa + método + 3 ferramentas de
+domínio) deu **5/8** hoje: 0/3 em execuções manuais, 5/5 numa bateria logo
+em seguida. Mesma configuração, mesmo prompt. Mecanismo: o passo 1 do método
+mandava consultar logs; o modelo filtrava por `|= "error"`, que volta vazio
+(mensagens em português, nível é label). A ferramenta responde com *dicas*
+("o filtro pode ser restritivo demais") e o modelo às vezes obedece a dica e
+vai depurar a query — `list_datasources`, `list_loki_label_names` — em vez
+de seguir para `saude_do_pool`. Às vezes se recupera no passo 4, às vezes
+conclui vago. A bateria de 5 de 15/09 não pegou porque as cinco caíram do
+lado bom.
+
+**Correção (método v2, `contexto/metodo-de-investigacao.md`):** passo 1 com
+a query exata sem filtro de texto e a instrução "se vier vazio, não depure a
+query: siga para o passo 2"; passo 2 com "SEMPRE, logo após o passo 1, chame
+`saude_do_pool`". Duas linhas. Nenhuma mudança de ferramenta ou de código.
+
+**Resultado (10 execuções, 14b):** **10/10**, caminho idêntico em todas
+(`saude_do_pool → quem_esta_segurando_locks → mudancas_recentes`), 4 passos,
+19–27s quente (69s na primeira, com carga do prompt). O modelo passou a
+pular a consulta de logs e ir direto ao pool — o ponto de descarrilamento
+deixou de existir. Resultados: `resultados/20260917-151726-rodada2-qwen3_14b/`.
+
+**Ablação (a pedido, respondendo "com um service map a IA acharia"):** ver
+`ABLACAO.md`. Resumo: só o mapa, 0/5; mapa + método sem ferramentas de
+domínio, 0/5 em três variantes (uma delas por chamada descartada pelo
+Ollama, `eval_count=38` com conteúdo vazio); tudo junto, 5/5 e 10/10.
+Saber que o worker existe não bastou; o método em prosa com ferramentas
+genéricas é frágil; as ferramentas de domínio compram confiabilidade.
+
+**Lição de processo:** bateria de 5 não detecta bi-estabilidade. Antes do
+palco, rodar **10** na configuração final, e rodar de novo depois de
+qualquer mudança em `contexto/`.

@@ -22,6 +22,7 @@ expor pouco é decisão de interface, e a interface é o contexto.
 
 import argparse
 import asyncio
+import json
 import os
 import pathlib
 import sys
@@ -49,6 +50,8 @@ FERRAMENTAS = [
     "traceql-search",         # busca de traces (Tempo MCP)
     "list_loki_label_names",  # descobrir quais labels existem antes de filtrar
 ]
+# FERRAMENTAS_EXTRA="a,b" (só ablação): expõe tools adicionais do MCP.
+FERRAMENTAS += [t.strip() for t in os.getenv("FERRAMENTAS_EXTRA", "").split(",") if t.strip()]
 
 SERVIDOR_MCP = StdioServerParameters(
     command="mcp-grafana",
@@ -182,9 +185,20 @@ def montar_system_prompt(com_contexto: bool) -> str:
     if not com_contexto:
         return PROMPT_BASE
     pedacos = [PROMPT_BASE]
-    for arq in sorted(pathlib.Path(__file__).parent.parent.glob("contexto/*.md")):
-        if arq.name != "LEIAME.md":
-            pedacos.append(f"\n--- {arq.name} ---\n{arq.read_text()}")
+    # CONTEXTO_ARQUIVOS="mapa-do-ambiente.md" restringe o que entra — usado
+    # nos experimentos de ablação (o que exatamente fecha o gap?). Vazio =
+    # tudo, que é a rodada 2 do palco.
+    apenas = {a.strip() for a in os.getenv("CONTEXTO_ARQUIVOS", "").split(",") if a.strip()}
+    raiz = pathlib.Path(__file__).parent.parent
+    for arq in sorted(raiz.glob("contexto/*.md")):
+        if arq.name == "LEIAME.md" or (apenas and arq.name not in apenas):
+            continue
+        pedacos.append(f"\n--- {arq.name} ---\n{arq.read_text()}")
+    # Entradas com "/" são caminhos relativos à raiz — arquivos de ablação
+    # que não podem morar em contexto/ (senão a rodada 2 os carregaria).
+    for extra in sorted(a for a in apenas if "/" in a):
+        arq = raiz / extra
+        pedacos.append(f"\n--- {arq.name} ---\n{arq.read_text()}")
     return "\n".join(pedacos)
 
 
@@ -298,7 +312,9 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
                 "name": t.name, "description": t.description,
                 "parameters": t.input_schema}} for t in expostas]
             nomes_validos = set(FERRAMENTAS)
-            if com_contexto:
+            # SEM_TOOLS_DOMINIO=1: contexto sem as ferramentas de domínio
+            # (ablação — o mapa sozinho basta?).
+            if com_contexto and not os.getenv("SEM_TOOLS_DOMINIO"):
                 nomes_validos |= set(FERRAMENTAS_DOMINIO)
                 tools_ollama += [{"type": "function", "function": {
                     "name": nome, "description": descricao,
@@ -328,8 +344,25 @@ async def _investigar(pergunta, com_contexto, auto, ralo, pensar=False) -> None:
 
                 if not chamadas:
                     conteudo = (msg.get("content") or "").strip()
+                    if os.getenv("RASTRO"):  # depuração: resposta crua do Ollama
+                        print(f"{CINZA}[rastro] msg={json.dumps(msg, ensure_ascii=False)[:600]} "
+                              f"done_reason={corpo.get('done_reason')} "
+                              f"eval_count={corpo.get('eval_count')} "
+                              f"prompt_eval_count={corpo.get('prompt_eval_count')}{FIM}")
                     anuncia = any(fr in conteudo.lower() for fr in (
                         "vamos ", "próximo passo", "tentar novamente"))
+                    # REPROMPT_CONTINUA=1 (só ablação): em vez de forçar a
+                    # conclusão, manda executar o próximo passo. Mede se o
+                    # modelo consegue seguir um método em prosa quando o host
+                    # não o interrompe. O palco NÃO usa isto.
+                    if (not conteudo or anuncia) and os.getenv("REPROMPT_CONTINUA") \
+                            and passo < MAX_PASSOS:
+                        print(f"\n{AMARELO}↻ resposta sem chamada — o host pede "
+                              f"que execute o próximo passo{FIM}")
+                        mensagens.append({"role": "user", "content": (
+                            "Não descreva o plano: execute-o. Chame agora a "
+                            "ferramenta do próximo passo do método.")})
+                        continue
                     if (not conteudo or anuncia) and not reprompt_usado \
                             and passo < MAX_PASSOS:
                         reprompt_usado = True

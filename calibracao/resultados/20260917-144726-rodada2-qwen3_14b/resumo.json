@@ -1,0 +1,75 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-144726",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas até o momento, não há evidências de logs de erro no checkout-api que possam explicar diretamente o erro 503. No entanto, como o checkout-api depende do inventory-api e do postgres, é pr",
+      "parede_s": 68.0,
+      "tempo_modelo_s": 66.7,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas até o momento, não há evidências de logs de erro no checkout-api que possam explicar diretamente o erro 503. Isso sugere que o erro pode estar relacionado a outro componente no caminho,",
+      "parede_s": 30.9,
+      "tempo_modelo_s": 29.8,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas até o momento, a causa raiz mais provável para o erro 503 no checkout-api é a falta de logs que indicam um problema no serviço. Isso sugere que o erro pode estar relacionado a uma falha",
+      "parede_s": 31.2,
+      "tempo_modelo_s": 29.8,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas, não há logs de erro no checkout-api disponíveis no Loki para o período analisado. Isso sugere que o erro 503 pode estar sendo causado por outro componente no caminho, como o inventory-",
+      "parede_s": 53.0,
+      "tempo_modelo_s": 51.4,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas até o momento, não há evidências de logs de erro no checkout-api que possam explicar o problema. Isso sugere que o erro 503 pode estar sendo causado por outro componente no sistema, com",
+      "parede_s": 31.2,
+      "tempo_modelo_s": 28.7,
+      "passos": 4,
+      "ferramentas": [
+        "list_datasources",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "erro_bom": 5
+  },
+  "meta": ">= 9/10 acerto"
+}

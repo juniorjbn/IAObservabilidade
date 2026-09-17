@@ -1,0 +1,90 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-143925",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o **inventory-api** está retornando erro 503 (serviço indisponível) ao **checkout-api**, o que está causando o erro 503 no **checkout-api** para os clientes. Isso pode estar relacionado a",
+      "parede_s": 133.9,
+      "tempo_modelo_s": 132.1,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o **inventory-api** está com o **pool de conexões esgotado**, o que está causando o erro 503 no **checkout-api**. Isso é confirmado pelos logs do **inventory-api**, que indicam que não há",
+      "parede_s": 56.7,
+      "tempo_modelo_s": 55.0,
+      "passos": 7,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "query_loki_logs",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "erro_bom",
+      "diagnostico": "Com base nas informações coletadas até o momento, a causa raiz mais provável para o erro 503 no checkout-api é uma falha no banco de dados, especificamente no pool de conexões do inventory-api. Isso pode estar causando b",
+      "parede_s": 52.9,
+      "tempo_modelo_s": 51.5,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o **inventory-api** está retornando erro 503 (serviço indisponível) ao **checkout-api**, o que está causando o erro 503 no **checkout-api** para os clientes. Isso pode estar relacionado a",
+      "parede_s": 44.5,
+      "tempo_modelo_s": 43.1,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "erro_bom",
+      "diagnostico": "A causa raiz mais provável é que o **inventory-api** está retornando erro 503 (serviço indisponível) ao **checkout-api**, o que está causando o erro 503 no **checkout-api** para os clientes. Isso pode estar relacionado a",
+      "parede_s": 44.3,
+      "tempo_modelo_s": 42.7,
+      "passos": 6,
+      "ferramentas": [
+        "list_datasources",
+        "traceql-search",
+        "query_prometheus",
+        "query_prometheus",
+        "query_loki_logs"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "erro_bom": 5
+  },
+  "meta": ">= 9/10 acerto"
+}
