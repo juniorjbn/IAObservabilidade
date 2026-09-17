@@ -185,6 +185,15 @@ Pendências restantes, todas de palco, nenhuma técnica:
    `num_ctx=16384` + `MODELO_OLLAMA` no Makefile; recalibrado 5/5 nas duas
    rodadas. Detalhes em `calibracao/PROTOCOLO.md`, seção 15/09.
 
+4. **Credencial do agente no Grafana é `admin/admin`** (`agente.py:57`),
+   mas a fala e o slide 6 afirmam "service account Viewer" como segunda
+   camada. Decisão pendente de João (17/09): criar o service account Viewer
+   e trocar a credencial, ou tirar a afirmação da fala.
+
+Demo ao vivo roda com **doitlive** (`roteiro/demo.sh`); checklist automático
+em `roteiro/antes-de-subir.sh`; `roteiro/grafana.sh pool|worker` abre o
+Explore com a query pronta.
+
 Grafo de conhecimento (graphify-out/) desatualizado desde 31/08 — rodar
 `/graphify . --update` quando houver folga; não é caminho crítico.
 
