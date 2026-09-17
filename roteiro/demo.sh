@@ -1,5 +1,5 @@
 #doitlive shell: /bin/zsh
-#doitlive speed: 4
+#doitlive speed: 100
 #doitlive commentecho: true
 #doitlive prompt: {dir.cyan} ❯
 #doitlive env: MODELO_OLLAMA=qwen3:14b
