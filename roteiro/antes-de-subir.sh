@@ -1,0 +1,42 @@
+#!/bin/bash
+# Checklist automático de "antes de subir" (ROTEIRO.md). Rodar na sala, 30 min
+# antes. Para em qualquer falha: se parar, NÃO há palestra ao vivo — vídeo.
+set -e
+cd "$(dirname "$0")/.."
+
+V="\033[32m✔\033[0m"; X="\033[31m✘\033[0m"
+
+echo "1/5  Stack de pé?"
+docker compose ps --format '{{.Name}} {{.Status}}' | grep -q "lgtm.*healthy" || { echo -e "  $X lgtm não está healthy — make subir"; exit 1; }
+echo -e "  $V"
+
+echo "2/5  Incidente reproduz? (~70s)"
+make -s verificar >/dev/null || { echo -e "  $X make verificar FALHOU — vídeo, não ao vivo"; exit 1; }
+echo -e "  $V"
+
+echo "3/5  Estado limpo"
+make -s curar >/dev/null; echo -e "  $V backfill desligado"
+
+echo "4/5  Pré-aquecendo qwen3:14b com num_ctx=16384 (~40s na primeira vez)"
+curl -s http://localhost:11434/api/generate -o /dev/null \
+  -d '{"model":"qwen3:14b","prompt":"ok","stream":false,"options":{"num_ctx":16384}}'
+ollama ps | grep -q "qwen3:14b" && echo -e "  $V modelo carregado" || { echo -e "  $X modelo não carregou"; exit 1; }
+
+echo "5/5  mcp-grafana e Tempo MCP respondem?"
+command -v mcp-grafana >/dev/null || { echo -e "  $X mcp-grafana não está no PATH"; exit 1; }
+curl -s -o /dev/null -w '%{http_code}' http://localhost:3200/api/mcp | grep -qE "200|405|406" || { echo -e "  $X Tempo MCP em :3200 não responde"; exit 1; }
+echo -e "  $V"
+
+cat <<'FIM'
+
+──────────────────────────────────────────────
+  Tudo verde. Agora, manual:
+  [ ] Notificações do macOS em Não Perturbe
+  [ ] iTerm: fonte grande (Cmd +), janela cheia
+  [ ] Vídeo do plano B: roteiro/videos/*.mp4 aberto no QuickTime, pausado
+  [ ] Slides abertos, slide 1
+  [ ] Wi-Fi: pode desligar. Nada depende dele.
+
+  Para começar:  doitlive play roteiro/demo.sh
+──────────────────────────────────────────────
+FIM

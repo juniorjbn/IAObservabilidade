@@ -10,6 +10,13 @@ modelo no meio da rodada 1.
 
 ## Antes de subir (na sala, 30 min antes)
 
+Tudo abaixo está automatizado em **`roteiro/antes-de-subir.sh`** (para em
+qualquer falha; se parar, é vídeo). A demo em si roda com **doitlive**:
+`doitlive play roteiro/demo.sh` da raiz do repo — qualquer tecla digita o
+próximo comando, Enter executa, TAB entra em modo livre para improvisar. As
+deixas amarelas são seguras de ler pela plateia; a fala completa fica fora do
+telão (`FALA-pessoal.md`, impresso).
+
 ```bash
 make verificar               # ~70s; NÃO suba ao palco se falhar
 make curar                   # garante estado limpo
