@@ -25,7 +25,9 @@ curl -s http://localhost:11434/api/generate -d \
   >/dev/null   # pré-aquece COM o num_ctx do agente (senão recarrega no palco)
 ```
 
-- [ ] Grafana aberto na aba do Explore (pool metric, refresh 5s, janela 5min)
+- [ ] Grafana: <http://localhost:3000> (anônimo, sem login). Já na query certa:
+      `roteiro/grafana.sh pool` — o `antes-de-subir.sh` abre isso no final.
+      Ligar o auto-refresh de 5s no canto superior direito do Explore.
 - [ ] Terminal 1: fonte grande, pronto com `make incidente`
 - [ ] Terminal 2: pronto com `make agente` (rodada 1)
 - [ ] Vídeo do plano B acessível offline (não em aba do navegador)
