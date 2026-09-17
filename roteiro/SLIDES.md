@@ -145,17 +145,18 @@ ambiente, é o que o modelo sabe sobre ele.
 - Tudo roda **neste notebook**. Sem Wi-Fi. Sem nuvem.
 - Modelo local via Ollama (qwen3, 14B de parâmetros)
 - Servidor MCP oficial do Grafana em **somente leitura**:
-  `mcp-grafana -disable-write` + service account Viewer
+  `mcp-grafana -disable-write`
 - **Humano no portão:** cada chamada de ferramenta espera um Enter
 
-**Destaque:** "O agente não escreve nem se quiser. Duas camadas."
+**Destaque:** "O agente não escreve nem se quiser. E o que ele lê, passa por mim."
 
 **Nota do apresentador:** Esse é o mesmo argumento para ambiente regulado. O
 `-disable-write` derruba todas as ferramentas de escrita — dashboards,
 incidentes, anotações, silêncios de alerta, até as queries SQL cruas, porque
-SQL cru com credencial de escrita muta dado. E por baixo, o service account é
-Viewer. Se alguém perguntar "flag é fachada": são duas camadas
-independentes; a flag remove as ferramentas, a credencial remove o poder.
+SQL cru com credencial de escrita muta dado. NÃO afirmar "service account
+Viewer": a demo roda com a credencial de admin. Se alguém perguntar "flag é
+fachada": em produção a segunda camada é a credencial Viewer; aqui é demo,
+está com admin, e é por isso que a flag importa — é ela que está segurando.
 
 **Fonte:** README do grafana/mcp-grafana; `mcp-grafana --help` (1.3.0).
 
