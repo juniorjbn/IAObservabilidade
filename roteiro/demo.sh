@@ -15,7 +15,7 @@ sed -n '/^SERVIDOR_MCP = /,/^)/p' agente/agente.py
 make incidente
 
 # ▶ o que o cliente vê
-curl -s -X POST localhost:8001/checkout; echo
+roteiro/comprar.sh
 
 # ▶ Grafana: pool e vazão  (Cmd+Tab volta)
 roteiro/grafana.sh pool
