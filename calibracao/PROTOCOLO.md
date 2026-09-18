@@ -147,3 +147,42 @@ genéricas é frágil; as ferramentas de domínio compram confiabilidade.
 **Lição de processo:** bateria de 5 não detecta bi-estabilidade. Antes do
 palco, rodar **10** na configuração final, e rodar de novo depois de
 qualquer mudança em `contexto/`.
+
+
+## 17/09/2026 (noite) — Narração do raciocínio: medida e decisão
+
+Pedido de João: mostrar no telão o que o modelo pensa a cada passo.
+
+**Tentativa 1 — pedir "Hipótese/Procuro" no prompt de investigação: REPROVADA.**
+O modelo passou a narrar em vez de chamar ferramenta. Rodada 1: 3/5 terminam
+com narração no lugar do diagnóstico, 55–300s, um run repetiu `traceql-search`
+4×. Rodada 2: 9/10 mas 32–514s, 5/10 terminam em narração, e a query de log
+que o método v2 tinha eliminado voltou. Prompt revertido.
+
+**Tentativa 2 — narração fora da banda: APROVADA.** Depois de cada chamada, o
+host faz uma pergunta lateral ao modelo (mesmas tools, senão o prefixo do
+prompt muda e o Ollama reprocessa tudo: 35–40s/passo medido), resposta não
+entra no histórico. Chamadas de inventário não são narradas.
+Comportamento intacto: rodada 1 5/5 e 5/5; rodada 2 5/5, 7/7, 3/3, 3/3, 5/5.
+
+**Custo, medido em condição de palco (Docker em 4 GB, VoiceMode parado):**
+
+| | modelo | narração | total | mediana |
+|---|---|---|---|---|
+| Rodada 1 | 72–134s | 20–63s (2–3×) | 92–168s | **157s** |
+| Rodada 2 | 26–64s quente | ~20s (3×) | 47–87s | **57s** |
+
+Isolado na mesma máquina, rodada 1: sem narração 45s; com narração 122s.
+A narração custa o dela E infla os passos seguintes (cache invalidada,
+histórico cresce). Não há solução barata num slot só do Ollama; um segundo
+slot custaria ~5 GB de KV.
+
+**Decisão de João (17/09): narração ligada nas duas rodadas (opção A).** O
+tempo vira conteúdo no telão. Roteiro: rodada 1 passa de 4 para 5 min, tirado
+das referências (3,5 → 2,5). `SEM_NARRACAO=1` desliga, voltando aos tempos
+de 15/09.
+
+**Memória:** uma bateria foi morta pelo macOS. Culpados: Kokoro do VoiceMode
+(6,5 GB), VM do Docker Desktop configurada com 8 GB (containers usam 1,7),
+Chrome. Docker reconfigurado para 4 GB; `antes-de-subir.sh` reprova VoiceMode
+ligado e menos de 25% livre.

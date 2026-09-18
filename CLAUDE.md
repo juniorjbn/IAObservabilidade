@@ -197,6 +197,12 @@ Duas linhas no `metodo-de-investigacao.md` resolveram: 10/10, caminho idêntico,
 após qualquer mudança em `contexto/`. Ablação respondendo à objeção do
 service map em `calibracao/ABLACAO.md` (só o mapa: 0/5).
 
+**17/09 (noite) — narração do raciocínio no telão, fora da banda.** Pedir no
+prompt quebrou a calibração; a versão lateral não. Custo: rodada 1 ~2,5 min,
+rodada 2 ~1 min (mediana). Decisão de João: ligada (opção A); `SEM_NARRACAO=1`
+desliga. Roteiro reminutado (rodada 1 = 5 min). Memória: Docker Desktop em
+4 GB, VoiceMode parado — o checklist reprova se não estiver assim.
+
 Demo ao vivo roda com **doitlive** (`roteiro/demo.sh`); checklist automático
 em `roteiro/antes-de-subir.sh`; `roteiro/grafana.sh pool|worker` abre o
 Explore com a query pronta.
