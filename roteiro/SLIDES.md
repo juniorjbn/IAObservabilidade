@@ -188,7 +188,7 @@ base, 0% durante (503=40), 100% após a cura.
 ## Slide 8 — Rodada 1: sem contexto [pano de fundo]
 
 **Tipo:** pano de fundo do terminal
-**Minuto:** 09:00–13:00
+**Minuto:** 09:00–14:00
 
 **Na tela:**
 - RODADA 1
@@ -198,8 +198,9 @@ base, 0% durante (503=40), 100% após a cura.
 
 **Destaque:** "O que ele sabe: Kubernetes. O que ele não sabe: o seu."
 
-**Nota do apresentador:** `make agente`. O modelo leva 35 a 60 segundos.
-Preencher lendo as chamadas de ferramenta em voz alta: "ele listou as fontes,
+**Nota do apresentador:** `make agente`. Leva 1,5 a 2,5 minutos. A cada passo
+aparece "Hipótese: … / Procuro: …" — ler em voz alta, é o modelo pensando.
+Depois a prévia do que voltou. Costuma ir assim: "ele listou as fontes,
 foi no trace do checkout, achou o inventory, foi nos logs…". Cada Enter no
 portão é visível. O diagnóstico vai culpar o `inventory-api`: "sobrecarregado,
 falha no backend ou conectividade".
@@ -209,7 +210,7 @@ falha no backend ou conectividade".
 ## Slide 9 — Quem concorda com ele?
 
 **Tipo:** pergunta, tela quase vazia
-**Minuto:** 13:00
+**Minuto:** 14:00
 
 **Na tela:**
 - Diagnóstico do agente: *"a causa raiz é o inventory-api"*
@@ -227,7 +228,7 @@ novo, sem contexto, faria exatamente isso.
 ## Slide 10 — Autópsia: o culpado invisível
 
 **Tipo:** diagrama, agora completo
-**Minuto:** 13:00–16:00
+**Minuto:** 14:00–16:00
 
 **Na tela:**
 O mesmo diagrama do slide 5, com uma caixa nova em destaque:
@@ -257,7 +258,7 @@ ele, o antes/depois vira mágica.
 ## Slide 11 — A injeção: quatro coisas
 
 **Tipo:** lista de quatro, numerada
-**Minuto:** 16:00–17:00
+**Minuto:** 17:00–18:00
 
 **Na tela:**
 1. **Mapa do ambiente** — topologia, donos, qual métrica é a verdade
@@ -278,7 +279,7 @@ devolve "pool do inventory no limite, 5 de 5". A interface é o contexto.
 ## Slide 12 — Rodada 2: com contexto [pano de fundo]
 
 **Tipo:** pano de fundo do terminal
-**Minuto:** 17:00–21:00
+**Minuto:** 18:00–22:00
 
 **Na tela:**
 - RODADA 2
@@ -289,7 +290,8 @@ devolve "pool do inventory no limite, 5 de 5". A interface é o contexto.
 
 **Nota do apresentador:** `make agente-r2`. O primeiro passo leva ~45s em
 silêncio: o modelo está lendo o mapa do ambiente pela primeira vez. Cobrir
-com: "agora ele está lendo o que eu escrevi". Depois disso, ~25s. Os portões
+com: "agora ele está lendo o que eu escrevi". Depois, ~1 min: a hipótese
+evolui a cada passo até nomear o worker — ler em voz alta. Os portões
 mostram `saude_do_pool`, `quem_esta_segurando_locks`, `mudancas_recentes`. O
 diagnóstico nomeia o worker, a flag e os locks. `make curar` — o gráfico
 volta ao vivo.
@@ -299,7 +301,7 @@ volta ao vivo.
 ## Slide 13 — Não foi o modelo que cresceu [cortável]
 
 **Tipo:** tabela de números grandes
-**Minuto:** 21:00–23:00
+**Minuto:** 22:00–24:00
 
 **Na tela:**
 Baterias de calibração, 10 execuções cada, nomeando o culpado certo:
@@ -325,7 +327,7 @@ recalibração de 15/09.
 ## Slide 14 — O que isso custa
 
 **Tipo:** três fatos, com fonte
-**Minuto:** 23:00–26:30
+**Minuto:** 24:00–26:30
 
 **Na tela:**
 - **Pesquisadores da Microsoft** (PACE-LM, 121 mil incidentes) precisaram

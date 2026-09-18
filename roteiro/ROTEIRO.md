@@ -1,9 +1,11 @@
 # Roteiro de palco — 30 minutos
 
 Minutagem construída sobre tempos MEDIDOS na calibração (não estimados),
-remedidos em 15/09 após corrigir o `num_ctx` (ver PROTOCOLO.md):
-rodada 1 no 14b: 35–60s de modelo; rodada 2: ~45s de silêncio no passo 1
-(processamento do prompt com contexto) + 24–29s de investigação.
+remedidos em 17/09 com a narração do raciocínio ligada (ver PROTOCOLO.md):
+rodada 1 no 14b: 92–168s, mediana 157s; rodada 2: 47–87s quente, mediana 57s
+(mais ~45s de silêncio no passo 1 frio, processando o prompt com contexto).
+Sem narração (`SEM_NARRACAO=1`) seria 45–60s / 20–30s — decisão de João em
+17/09: narração ligada, o tempo vira conteúdo no telão.
 Carga fria do 14b: ~42s — por isso o pré-aquecimento é inegociável, e ele
 PRECISA pedir o mesmo `num_ctx` do agente, senão o Ollama recarrega o
 modelo no meio da rodada 1.
@@ -42,19 +44,19 @@ curl -s http://localhost:11434/api/generate -d \
 | 02:30–05:00 | **O gap tem nome** | Gartner aposentou "AIOps Platforms" (03/2025). Thoughtworks: sem engenharia de contexto, vira chat sobre dados quebrados. Uma frase cada, slide único. |
 | 05:00–08:00 | **O ambiente** | Topologia na tela — SEM mostrar o worker no diagrama (ele aparece só na autópsia). Stack local, nada sai da máquina = argumento de ambiente regulado. Mostrar o comando do MCP com `-disable-write` e falar do portão humano. |
 | 08:00–09:00 | **O incidente** | `make incidente` ao vivo. Em seguida, o sintoma como o cliente sente: `curl -X POST localhost:8001/checkout` devolvendo o 503 cru na tela. Depois o Grafana: pool do inventory crava em 5, vazão despenca. "Isso é um plantão de verdade: 503 pro cliente, gráfico feio." |
-| 09:00–13:00 | **RODADA 1 — o erro** | `make agente`. Narrar os portões (Enter visível). Modelo leva ~35–60s no total; preencher com leitura das tool calls em voz alta. Diagnóstico: culpa o inventory-api. **Pausa. "Quem concorda com ele?"** Deixar a sala responder. |
-| 13:00–16:00 | **Autópsia** | O dado existia DESDE O INÍCIO: mostrar no Grafana o pool metric e os logs do worker (que o agente nunca consultou — não sabia que existiam). Revelar o worker no diagrama. "Não é burrice do modelo. É o que qualquer plantonista novo faria sem contexto." |
-| 16:00–17:00 | **A injeção** | `cat contexto/mapa-do-ambiente.md` e `metodo-de-investigacao.md` na tela, rolagem rápida. "Quatro coisas: mapa, método, ferramentas de domínio, mudanças recentes. Zero RAG, zero fine-tuning, zero modelo novo." |
-| 17:00–21:00 | **RODADA 2 — o acerto** | `make agente-r2`. **Passo 1 demora ~45s em silêncio** (o modelo está lendo o mapa do ambiente pela primeira vez) — cobrir com a fala: "agora ele está lendo o que eu escrevi". Depois disso, ~25s. Os portões são exatamente três, nessa ordem: `saude_do_pool`, `quem_esta_segurando_locks`, `mudancas_recentes` (10/10 idêntico em 17/09). Diagnóstico nomeia o worker, a flag e os locks. `make curar`, gráfico volta ao vivo. |
-| 21:00–23:00 | **Kicker (cortável)** | Slide: as baterias de calibração. "Isso foi o 14b. O 8b — metade do tamanho — também acerta com contexto: 9 de 10. Sem contexto, o mesmo 8b: zero de dez." Não foi o modelo que cresceu. |
-| 23:00–26:30 | **O que isso custa** | PACE-LM: "pesquisadores da Microsoft construíram um estimador de confiança porque o modelo não sabe quando não sabe" (calibração, ~1/3 do erro). Roy et al.: ferramenta bate documento. Engenharia de contexto ≠ RAG. Humano no portão não é enfeite: é o design. |
+| 09:00–14:00 | **RODADA 1 — o erro** | `make agente`. Narrar os portões (Enter visível). Agente leva ~1,5–2,5 min (investigação + narração). A cada passo aparece `Hipótese:` / `Procuro:` — LER em voz alta, é o roteiro do modelo. Depois, a prévia do que voltou. Diagnóstico: culpa o inventory-api. **Pausa. "Quem concorda com ele?"** Deixar a sala responder. |
+| 14:00–17:00 | **Autópsia** | O dado existia DESDE O INÍCIO: mostrar no Grafana o pool metric e os logs do worker (que o agente nunca consultou — não sabia que existiam). Revelar o worker no diagrama. "Não é burrice do modelo. É o que qualquer plantonista novo faria sem contexto." |
+| 17:00–18:00 | **A injeção** | `cat contexto/mapa-do-ambiente.md` e `metodo-de-investigacao.md` na tela, rolagem rápida. "Quatro coisas: mapa, método, ferramentas de domínio, mudanças recentes. Zero RAG, zero fine-tuning, zero modelo novo." |
+| 18:00–22:00 | **RODADA 2 — o acerto** | `make agente-r2`. **Passo 1 demora ~45s em silêncio** (o modelo está lendo o mapa do ambiente pela primeira vez) — cobrir com a fala: "agora ele está lendo o que eu escrevi". Depois, ~1 min com a hipótese evoluindo a cada passo até nomear o worker. Os portões são exatamente três, nessa ordem: `saude_do_pool`, `quem_esta_segurando_locks`, `mudancas_recentes` (10/10 idêntico em 17/09). Diagnóstico nomeia o worker, a flag e os locks. `make curar`, gráfico volta ao vivo. |
+| 22:00–24:00 | **Kicker (cortável)** | Slide: as baterias de calibração. "Isso foi o 14b. O 8b — metade do tamanho — também acerta com contexto: 9 de 10. Sem contexto, o mesmo 8b: zero de dez." Não foi o modelo que cresceu. |
+| 24:00–26:30 | **O que isso custa** | PACE-LM: "pesquisadores da Microsoft construíram um estimador de confiança porque o modelo não sabe quando não sabe" (calibração, ~1/3 do erro). Roy et al.: ferramenta bate documento. Engenharia de contexto ≠ RAG. Humano no portão não é enfeite: é o design. |
 | 26:30–27:30 | **Fechamento** | Três frases, sem slide: (1) A IA não resolveu o incidente. (2) Quem aprovou cada passo dela, e quem reverte a configuração, é você. (3) O que ela entregou foi o detalhe que você não tinha visto — um worker que não aparece em nenhum trace. |
 | 27:30–30:00 | **Q&A** | Respostas hostis prontas no dossiê (`referencias/DOSSIE.md`). |
 
 ## Pontos de corte (se atrasar)
 
-1. **Kicker do 8b** (21:00) — 2 min. Corta inteiro, não encolhe.
-2. **Referências** (23:00) — de 3,5 min para 1,5: só PACE-LM.
+1. **Kicker do 8b** (22:00) — 2 min. Corta inteiro, não encolhe.
+2. **Referências** (24:00) — de 2,5 min para 1,5: só PACE-LM.
 3. NUNCA cortar: autópsia (13:00) — sem ela o antes/depois vira mágica.
 
 ## Plano B por modo de falha
