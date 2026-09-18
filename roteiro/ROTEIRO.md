@@ -12,9 +12,9 @@ modelo no meio da rodada 1.
 
 ## Antes de subir (na sala, 30 min antes)
 
-Tudo abaixo está automatizado em **`roteiro/antes-de-subir.sh`** (para em
+Tudo abaixo está automatizado em **`make preparar`** (`roteiro/antes-de-subir.sh`) (para em
 qualquer falha; se parar, é vídeo). A demo em si roda com **doitlive**:
-`doitlive play roteiro/demo.sh` da raiz do repo — qualquer tecla digita o
+`make demo` da raiz do repo — qualquer tecla digita o
 próximo comando, Enter executa, TAB entra em modo livre para improvisar. As
 deixas amarelas são seguras de ler pela plateia; a fala completa fica fora do
 telão (`FALA-pessoal.md`, impresso).
@@ -27,9 +27,9 @@ curl -s http://localhost:11434/api/generate -d \
   >/dev/null   # pré-aquece COM o num_ctx do agente (senão recarrega no palco)
 ```
 
-- [ ] Grafana: <http://localhost:3000> (anônimo, sem login). Já na query certa:
-      `roteiro/grafana.sh pool` — o `antes-de-subir.sh` abre isso no final.
-      Ligar o auto-refresh de 5s no canto superior direito do Explore.
+- [ ] Grafana: dashboard "Loja — o incidente", <http://localhost:3000/d/loja-incidente>
+      (anônimo, kiosk, refresh 5s já na URL). O `make preparar` abre no final;
+      `roteiro/grafana.sh pool|worker` reabre.
 - [ ] Terminal 1: fonte grande, pronto com `make incidente`
 - [ ] Terminal 2: pronto com `make agente` (rodada 1)
 - [ ] Vídeo do plano B acessível offline (não em aba do navegador)
