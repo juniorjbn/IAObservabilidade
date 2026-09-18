@@ -6,7 +6,7 @@ COMPOSE := docker compose
 
 .DEFAULT_GOAL := ajuda
 
-.PHONY: ajuda subir derrubar incidente curar estado verificar logs painel reiniciar agente agente-r2
+.PHONY: ajuda subir derrubar incidente curar estado verificar logs painel reiniciar preparar demo agente agente-r2
 
 ajuda:  ## Lista os comandos disponíveis
 	@grep -hE '^[a-z0-9-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -41,6 +41,12 @@ estado:  ## Mostra se o incidente está ativo e a saúde dos serviços
 
 verificar:  ## Prova que o incidente reproduz (~70s). Rode antes de cada apresentação.
 	@python3 scripts/verificar_incidente.py
+
+preparar:  ## Checklist completo de antes de subir (memória, stack, incidente, modelo, MCPs, Grafana)
+	@roteiro/antes-de-subir.sh
+
+demo:  ## A demo ao vivo com doitlive (qualquer tecla digita, Enter executa)
+	@doitlive play roteiro/demo.sh
 
 logs:  ## Acompanha os logs dos serviços da aplicação
 	$(COMPOSE) logs -f checkout-api inventory-api reconciliation-worker
