@@ -286,8 +286,17 @@ def resumir_resultado(texto: str, max_linhas: int = 3, largura: int = 110) -> li
     elif isinstance(dados, dict) and isinstance(dados.get("data"), list):
         itens = dados["data"]
         if itens and isinstance(itens[0], dict) and "line" in itens[0]:
-            linhas.append(f"{len(itens)} linha(s) de log; as mais recentes:")
-            linhas += [f"  {i['line']}" for i in itens[:max_linhas - 1]]
+            # Mensagens distintas com contagem: 10 linhas iguais viram uma só
+            # com "8×", e o que difere só por número (SKU-0005) colapsa.
+            import re as _re2
+            contagem: dict[str, int] = {}
+            for i in itens:
+                chave = _re2.sub(r"\b\d{5,}\b", "#", _re2.sub(r"SKU-\d+", "SKU-*", i["line"]))
+                contagem[chave] = contagem.get(chave, 0) + 1
+            linhas.append(f"{len(itens)} linha(s) de log, {len(contagem)} mensagem(ns) distinta(s):")
+            for msg, n in sorted(contagem.items(), key=lambda kv: -kv[1])[:5]:
+                linhas.append(f"  {n:>3}×  {msg}")
+            return [l[:largura] for l in linhas]
         elif itens and isinstance(itens[0], dict) and "metric" in itens[0]:
             for i in itens[:max_linhas]:
                 m = i["metric"]; v = i.get("value", i.get("values", ["", "?"]))
