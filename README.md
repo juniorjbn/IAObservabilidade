@@ -133,7 +133,8 @@ em dez segundos. A inflexão é visível da última fila do auditório.
 
 ## Arquitetura
 
-`docs/arquitetura.excalidraw` — abra em <https://excalidraw.com> (menu ☰ → Open)
+`docs/ARQUITETURA.md` — diagrama em Mermaid (o GitHub renderiza) com o papel de cada peça.
+`docs/arquitetura.excalidraw` — o mesmo desenho editável: <https://excalidraw.com> (menu ☰ → Open)
 ou no plugin Excalidraw do VS Code. Gerado por `docs/gerar_arquitetura.py`;
 `make stack` imprime a mesma stack com as versões lidas do que está rodando.
 
