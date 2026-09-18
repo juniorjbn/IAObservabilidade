@@ -1,0 +1,80 @@
+{
+  "rodada": "rodada2-qwen3_14b",
+  "quando": "20260917-193355",
+  "execucoes": [
+    {
+      "run": 1,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de transações longas, causando o esgotamento do pool de conexões do inventory-api. Isso resulta em requisições sendo bloqueadas e, consequen",
+      "parede_s": 140.2,
+      "tempo_modelo_s": 119.3,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 2,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por meio de transações longas, causando congestionamento no pool de conexões do inventory-api. Isso resulta em requisições pendentes no checkout-api,",
+      "parede_s": 58.8,
+      "tempo_modelo_s": 37.1,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 3,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está executando um backfill com transações longas, o que provavelmente está causando o pool de conexões do inventory-api a ficar no limite, resultando em erros 503 no checkout-api.",
+      "parede_s": 88.8,
+      "tempo_modelo_s": 63.8,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 4,
+      "classe": "acerto_precoce",
+      "diagnostico": "O reconciliation-worker está executando um backfill com transações longas, o que está causando bloqueios no PostgreSQL. Isso está resultando em conexões esgotadas no inventory-api, causando o erro 503 no checkout-api. A ",
+      "parede_s": 49.2,
+      "tempo_modelo_s": 26.4,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    },
+    {
+      "run": 5,
+      "classe": "acerto_precoce",
+      "diagnostico": "O serviço reconciliation-worker está segurando locks no banco de dados por um longo período de tempo devido à configuração reconciliacao.backfill=true, que está ativando transações longas durante o backfill trimestral. I",
+      "parede_s": 51.4,
+      "tempo_modelo_s": 29.9,
+      "passos": 4,
+      "ferramentas": [
+        "saude_do_pool",
+        "quem_esta_segurando_locks",
+        "mudancas_recentes"
+      ],
+      "erros_de_ferramenta": 0
+    }
+  ],
+  "contagem": {
+    "acerto_precoce": 5
+  },
+  "meta": ">= 9/10 acerto"
+}
