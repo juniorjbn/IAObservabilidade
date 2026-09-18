@@ -39,7 +39,9 @@ curl -s -m 240 http://localhost:11434/api/generate -o /dev/null \
 ollama ps | grep -q "qwen3:14b" && echo -e "  $V modelo carregado" || { echo -e "  $X modelo não carregou"; exit 1; }
 
 echo "5/6  mcp-grafana e Tempo MCP respondem?"
-command -v mcp-grafana >/dev/null || { echo -e "  $X mcp-grafana não está no PATH"; exit 1; }
+for bin in mcp-grafana doitlive glow pandoc; do
+  command -v "$bin" >/dev/null || { echo -e "  $X $bin não está no PATH (brew install $bin)"; exit 1; }
+done
 # GET no endpoint MCP abre um stream e nunca encerra (travou o checklist em
 # 18/09). Um POST initialize, como faz um cliente de verdade, responde e sai.
 curl -s -m 8 -o /dev/null -w '%{http_code}' -X POST http://localhost:3200/api/mcp \
