@@ -34,29 +34,34 @@ echo "3/6  Estado limpo"
 make -s curar >/dev/null; echo -e "  $V backfill desligado"
 
 echo "4/6  Pré-aquecendo qwen3:14b com num_ctx=16384 (~40s na primeira vez)"
-curl -s http://localhost:11434/api/generate -o /dev/null \
+curl -s -m 240 http://localhost:11434/api/generate -o /dev/null \
   -d '{"model":"qwen3:14b","prompt":"ok","stream":false,"options":{"num_ctx":16384}}'
 ollama ps | grep -q "qwen3:14b" && echo -e "  $V modelo carregado" || { echo -e "  $X modelo não carregou"; exit 1; }
 
 echo "5/6  mcp-grafana e Tempo MCP respondem?"
 command -v mcp-grafana >/dev/null || { echo -e "  $X mcp-grafana não está no PATH"; exit 1; }
-curl -s -o /dev/null -w '%{http_code}' http://localhost:3200/api/mcp | grep -qE "200|405|406" || { echo -e "  $X Tempo MCP em :3200 não responde"; exit 1; }
+# GET no endpoint MCP abre um stream e nunca encerra (travou o checklist em
+# 18/09). Um POST initialize, como faz um cliente de verdade, responde e sai.
+curl -s -m 8 -o /dev/null -w '%{http_code}' -X POST http://localhost:3200/api/mcp \
+  -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"antes-de-subir","version":"0"}}}' \
+  | grep -q "^200$" || { echo -e "  $X Tempo MCP em :3200 não respondeu ao initialize"; exit 1; }
 echo -e "  $V"
 
-echo "6/6  Abrindo o Grafana já na métrica de pool (http://localhost:3000)"
+echo "6/6  Abrindo o dashboard da demo (http://localhost:3000/d/loja-incidente)"
 "$(dirname "$0")/grafana.sh" pool
 
 cat <<'FIM'
 
 ──────────────────────────────────────────────
-  Tudo verde. Grafana aberto no Explore: ligue o auto-refresh de 5s
-  (canto superior direito). Depois, manual:
+  Tudo verde. Dashboard aberto em modo kiosk, refresh de 5s (Esc mostra
+  o menu se precisar). Agora, manual:
   [ ] Notificações do macOS em Não Perturbe
   [ ] iTerm: fonte grande (Cmd +), janela cheia
   [ ] Vídeo do plano B: roteiro/videos/*.mp4 aberto no QuickTime, pausado
   [ ] Slides abertos, slide 1
   [ ] Wi-Fi: pode desligar. Nada depende dele.
 
-  Para começar:  doitlive play roteiro/demo.sh
+  Para começar:  make demo
 ──────────────────────────────────────────────
 FIM
