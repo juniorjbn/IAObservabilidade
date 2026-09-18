@@ -29,9 +29,9 @@ make agente
 roteiro/grafana.sh worker
 
 # ▶ o contexto · rolar rápido
-cat contexto/mapa-do-ambiente.md
+pandoc -t gfm --wrap=none contexto/mapa-do-ambiente.md | glow -w $(tput cols) -
 
-cat contexto/metodo-de-investigacao.md
+pandoc -t gfm --wrap=none contexto/metodo-de-investigacao.md | glow -w $(tput cols) -
 
 wc -c contexto/*.md
 
