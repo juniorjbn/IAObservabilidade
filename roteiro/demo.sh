@@ -9,7 +9,7 @@
 # ─────────────────────────────────────────────
 
 # ▶ 07:00 · como o MCP sobe
-sed -n '53,56p' agente/agente.py
+sed -n '/^SERVIDOR_MCP = /,/^)/p' agente/agente.py
 
 # ▶ 08:00 · o incidente
 make incidente
