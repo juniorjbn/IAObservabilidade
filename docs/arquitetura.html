@@ -1,0 +1,96 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Arquitetura — IAObservabilidade</title>
+<style>
+ body{margin:24px;background:#fff;color:#1e1e1e;font:14px system-ui,sans-serif}
+ .bar{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+ button{font:inherit;padding:6px 12px;border:1px solid #adb5bd;border-radius:6px;background:#f8f9fa;cursor:pointer}
+ #png{display:none;max-width:100%;border:1px solid #dee2e6}
+ .dica{color:#868e96}
+</style>
+<div class="bar">
+ <button id="b">Gerar PNG 3x (pra copiar no slide)</button>
+ <a id="dl" download="arquitetura.png" hidden><button>Baixar PNG</button></a>
+ <span class="dica" id="s">Fonte: docs/ARQUITETURA.md. Este HTML só renderiza.</span>
+</div>
+<pre class="mermaid" id="src">%%{init: {"theme": "base", "themeVariables": {
+  "primaryColor": "#ffffff", "primaryTextColor": "#1e1e1e", "primaryBorderColor": "#495057",
+  "lineColor": "#495057", "textColor": "#1e1e1e", "titleColor": "#1e1e1e",
+  "clusterBkg": "#f1f3f5", "clusterBorder": "#adb5bd",
+  "edgeLabelBackground": "#ffffff", "nodeTextColor": "#1e1e1e"
+}}}%%
+flowchart LR
+    subgraph app["APLICAÇÃO — Python 3.12 · FastAPI · OpenTelemetry SDK"]
+        LG[loadgen<br/>8 req/s] -->|HTTP| CK[checkout-api<br/>pool 5]
+        CK -->|HTTP /reservar| INV[inventory-api<br/>pool 5 · timeout 2s]
+        INV -->|UPDATE · lock de linha| PG[(Postgres 16<br/>tabela inventory)]
+        WK[reconciliation-worker<br/>backfill: FOR UPDATE 20s] -.->|SQL · sem HTTP,<br/>sem trace| PG
+    end
+
+    subgraph lgtm["grafana/otel-lgtm 0.32 — um container"]
+        COL[OTel Collector<br/>OTLP/HTTP :4318]
+        COL --> PROM[Prometheus 3.14<br/>métricas]
+        COL --> LOKI[Loki 3.7<br/>logs]
+        COL --> TMP[Tempo 3.0<br/>traces · MCP :3200]
+        GRAF[Grafana 13<br/>:3000 · dashboard Loja]
+    end
+
+    CK & INV & WK -->|traces · métricas · logs| COL
+
+    subgraph agente["AGENTE — somente leitura · humano no portão"]
+        OLL[Ollama 0.33<br/>qwen3:14b Q4_K_M · num_ctx 16k]
+        AG[agente/agente.py<br/>loop ReAct · portão Enter<br/>corte 2000 chars · narração lateral]
+        OLL <-->|tool calls| AG
+        MG[mcp-grafana 1.3<br/>-disable-write · stdio]
+        TMCP[Tempo MCP<br/>streamable HTTP]
+        DOM[ferramentas de domínio · rodada 2<br/>saude_do_pool<br/>quem_esta_segurando_locks<br/>mudancas_recentes]
+        CTX[/contexto/*.md · ~4 KB · rodada 2<br/>mapa do ambiente<br/>método de investigação/]
+        AG --> MG
+        AG --> TMCP
+        AG --> DOM
+        CTX -->|system prompt| AG
+    end
+
+    MG -->|API · admin| GRAF
+    GRAF --> PROM & LOKI & TMP
+    TMCP -.->|TraceQL| TMP
+    DOM -.->|pg_stat_activity · só leitura| PG
+    DOM -.->|métricas · logs| GRAF
+
+    subgraph palco["PALCO"]
+        DL[doitlive<br/>roteiro/demo.sh]
+        GL[glow + pandoc<br/>contexto/*.md]
+        PREP[make preparar<br/>checklist + memória]
+        VER[make verificar<br/>100% → 0% → 100%]
+        CAL[calibração<br/>baterias de 10]
+    end
+
+    classDef vermelho fill:#ffc9c9,stroke:#c92a2a,color:#1e1e1e
+    classDef azul fill:#a5d8ff,stroke:#1971c2,color:#1e1e1e
+    classDef amarelo fill:#fff9db,stroke:#e67700,color:#1e1e1e
+    classDef verde fill:#d3f9d8,stroke:#2b8a3e,color:#1e1e1e
+    classDef roxo fill:#e5dbff,stroke:#5f3dc4,color:#1e1e1e
+    classDef cinza fill:#e9ecef,stroke:#868e96,color:#1e1e1e
+    class WK vermelho
+    class CK,INV azul
+    class COL,PROM,LOKI,TMP,GRAF amarelo
+    class OLL,AG,MG,TMCP verde
+    class DOM,CTX roxo
+    class LG,DL,GL,PREP,VER,CAL cinza
+</pre>
+<img id="png" alt="arquitetura">
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+mermaid.initialize({startOnLoad:true});
+document.getElementById("b").onclick = async () => {
+  const svg = document.querySelector("svg");
+  const xml = new XMLSerializer().serializeToString(svg);
+  const url = URL.createObjectURL(new Blob([xml], {type:"image/svg+xml"}));
+  const img = new Image(); img.src = url; await img.decode();
+  const k = 3, c = document.createElement("canvas");
+  c.width = svg.viewBox.baseVal.width * k; c.height = svg.viewBox.baseVal.height * k;
+  const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0,0,c.width,c.height);
+  g.drawImage(img, 0, 0, c.width, c.height);
+  const out = document.getElementById("png"); out.src = c.toDataURL("image/png"); out.style.display = "block";
+  const dl = document.getElementById("dl"); dl.href = out.src; dl.hidden = false;
+  document.getElementById("s").textContent = "PNG abaixo: botão direito → Copiar imagem, ou Baixar.";
+};
+</script></html>
