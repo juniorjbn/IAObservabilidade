@@ -8,6 +8,9 @@
 #  demo · qualquer tecla digita · Enter executa
 # ─────────────────────────────────────────────
 
+# ▶ a stack: tudo local, com versão
+make stack
+
 # ▶ como o MCP sobe
 sed -n '/^SERVIDOR_MCP = /,/^)/p' agente/agente.py
 
