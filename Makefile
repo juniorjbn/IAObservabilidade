@@ -6,7 +6,7 @@ COMPOSE := docker compose
 
 .DEFAULT_GOAL := ajuda
 
-.PHONY: ajuda subir derrubar incidente curar estado verificar logs painel reiniciar preparar demo agente agente-r2
+.PHONY: ajuda subir derrubar incidente curar estado verificar logs painel reiniciar preparar demo stack agente agente-r2
 
 ajuda:  ## Lista os comandos disponíveis
 	@grep -hE '^[a-z0-9-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -50,6 +50,9 @@ demo:  ## A demo ao vivo com doitlive (qualquer tecla digita, Enter executa)
 
 logs:  ## Acompanha os logs dos serviços da aplicação
 	$(COMPOSE) logs -f checkout-api inventory-api reconciliation-worker
+
+stack:  ## Mostra a stack inteira com versões, lida do que está rodando
+	@scripts/stack.sh
 
 painel:  ## Abre o Grafana
 	@python3 -c "import webbrowser; webbrowser.open('http://localhost:3000')"

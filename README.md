@@ -131,6 +131,12 @@ após a cura        658 req/10s | sucesso 100,0% | p95  32,5ms
 Não é só a taxa de erro que muda: a vazão despenca de 684 para 25 requisições
 em dez segundos. A inflexão é visível da última fila do auditório.
 
+## Arquitetura
+
+`docs/arquitetura.excalidraw` — abra em <https://excalidraw.com> (menu ☰ → Open)
+ou no plugin Excalidraw do VS Code. Gerado por `docs/gerar_arquitetura.py`;
+`make stack` imprime a mesma stack com as versões lidas do que está rodando.
+
 ## Estrutura
 
 ```
