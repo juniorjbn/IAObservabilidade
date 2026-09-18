@@ -4,6 +4,12 @@ Tudo roda num MacBook M3 Pro de 18 GB. Nada sai da máquina. Versões em
 `make stack`; o desenho editável está em `arquitetura.excalidraw`.
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {
+  "primaryColor": "#ffffff", "primaryTextColor": "#1e1e1e", "primaryBorderColor": "#495057",
+  "lineColor": "#495057", "textColor": "#1e1e1e", "titleColor": "#1e1e1e",
+  "clusterBkg": "#f1f3f5", "clusterBorder": "#adb5bd",
+  "edgeLabelBackground": "#ffffff", "nodeTextColor": "#1e1e1e"
+}}}%%
 flowchart LR
     subgraph app["APLICAÇÃO — Python 3.12 · FastAPI · OpenTelemetry SDK"]
         LG[loadgen<br/>8 req/s] -->|HTTP| CK[checkout-api<br/>pool 5]
