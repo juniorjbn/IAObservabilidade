@@ -50,12 +50,12 @@ flowchart LR
         CAL[calibração<br/>baterias de 10]
     end
 
-    classDef vermelho fill:#ffc9c9,stroke:#c92a2a
-    classDef azul fill:#a5d8ff,stroke:#1971c2
-    classDef amarelo fill:#fff9db,stroke:#e67700
-    classDef verde fill:#d3f9d8,stroke:#2b8a3e
-    classDef roxo fill:#e5dbff,stroke:#5f3dc4
-    classDef cinza fill:#e9ecef,stroke:#868e96
+    classDef vermelho fill:#ffc9c9,stroke:#c92a2a,color:#1e1e1e
+    classDef azul fill:#a5d8ff,stroke:#1971c2,color:#1e1e1e
+    classDef amarelo fill:#fff9db,stroke:#e67700,color:#1e1e1e
+    classDef verde fill:#d3f9d8,stroke:#2b8a3e,color:#1e1e1e
+    classDef roxo fill:#e5dbff,stroke:#5f3dc4,color:#1e1e1e
+    classDef cinza fill:#e9ecef,stroke:#868e96,color:#1e1e1e
     class WK vermelho
     class CK,INV azul
     class COL,PROM,LOKI,TMP,GRAF amarelo
