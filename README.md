@@ -6,17 +6,6 @@ incidente. Mas pode te entregar aquele 'detalhe' que faltava."** (TDC).
 A demo roda inteira na sua máquina. Nada sai daqui — que por acaso é o mesmo
 argumento usado para ambiente regulado.
 
-## O estado deste repositório
-
-| Etapa | Situação |
-|---|---|
-| 1. Demo reproduzível (stack + incidente) | pronta e verificada |
-| 2. Agente Python com MCP e portão humano | a fazer |
-| 3. Calibração do erro da rodada 1 | a fazer |
-| 4. Camada de contexto e ferramentas de domínio | a fazer |
-| 5. Roteiro de palco minutado | a fazer |
-| 6. Dossiê de referências verificadas | a fazer |
-
 ## Subir
 
 ```bash
@@ -37,7 +26,7 @@ make derrubar     # apaga tudo
 dispara o incidente, cura, mede de novo e falha com código diferente de zero se
 o comportamento não for o esperado. É a diferença entre saber e torcer.
 
-## O agente (etapa 2)
+## O agente
 
 ```bash
 python3 -m venv agente/.venv && agente/.venv/bin/pip install -r agente/requirements.txt
