@@ -9,3 +9,6 @@ capturas/
 agente/.venv/
 graphify-out/
 roteiro/videos/*.gif
+
+# Local, nunca commitado (contexto de trabalho)
+CLAUDE.md

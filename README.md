@@ -147,3 +147,7 @@ demo/services/         checkout-api, inventory-api, worker, gerador de carga
 db/init.sql            estoque e pedidos
 scripts/verificar_incidente.py   a prova de que o incidente reproduz
 ```
+
+## Licença
+
+MIT — veja `LICENSE`. Use, adapte e leve para a sua operação.
