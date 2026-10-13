@@ -49,6 +49,7 @@ async def lifespan(_app: FastAPI):
     db.esperar_banco(engine)
     log.info("checkout-api pronto, falando com %s", URL_INVENTORY)
     yield
+    engine.dispose()
 
 
 app = FastAPI(title=NOME_SERVICO, lifespan=lifespan)
