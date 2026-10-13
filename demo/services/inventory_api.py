@@ -44,6 +44,7 @@ async def lifespan(_app: FastAPI):
     db.esperar_banco(engine)
     log.info("inventory-api pronto (pool=%s)", engine.pool.size())
     yield
+    engine.dispose()
 
 
 app = FastAPI(title=NOME_SERVICO, lifespan=lifespan)

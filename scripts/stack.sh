@@ -8,7 +8,14 @@ ROW() { printf "  %-22s %-28s %s\n" "$1" "$2" "$3"; }
 
 echo
 echo "  MÁQUINA"
-ROW "hardware"   "$(sysctl -n machdep.cpu.brand_string), $(( $(sysctl -n hw.memsize) / 1073741824 )) GB" "macOS $(sw_vers -productVersion)"
+if [ "$(uname)" = "Darwin" ]; then
+    HW_INFO="$(sysctl -n machdep.cpu.brand_string 2>/dev/null), $(( $(sysctl -n hw.memsize 2>/dev/null) / 1073741824 )) GB"
+    OS_INFO="macOS $(sw_vers -productVersion 2>/dev/null)"
+else
+    HW_INFO="$(lscpu | grep 'Model name' | awk -F: '{print $2}' | xargs 2>/dev/null), $(awk '/MemTotal/ {printf "%.0f", $2/1024/1024}' /proc/meminfo 2>/dev/null) GB"
+    OS_INFO="$(grep PRETTY_NAME /etc/os-release 2>/dev/null | cut -d= -f2 | tr -d '\"')"
+fi
+ROW "hardware"   "$HW_INFO" "$OS_INFO"
 echo
 echo "  MODELO (local, offline)"
 ROW "ollama"     "$(ollama --version 2>/dev/null | grep -o '[0-9][0-9.]*')" "http://localhost:11434"

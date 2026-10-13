@@ -58,7 +58,8 @@ SERVIDOR_MCP = StdioServerParameters(
     args=["-t", "stdio", "-disable-write",
           "-enabled-tools", "datasource,prometheus,loki"],
     env={"GRAFANA_URL": "http://localhost:3000",
-         "GRAFANA_USERNAME": "admin", "GRAFANA_PASSWORD": "admin"},
+         "GRAFANA_USERNAME": os.getenv("GRAFANA_USERNAME", "admin"),
+         "GRAFANA_PASSWORD": os.getenv("GRAFANA_PASSWORD", "admin")},
 )
 
 # O prompt v2 ensina o CONTRATO das ferramentas — conhecimento de ofício de
@@ -94,8 +95,8 @@ PROMPT_BASE = (
 # de plantão DESTE ambiente faria. A interface é o contexto.
 
 GRAFANA_PROXY = "http://localhost:3000/api/datasources/proxy/uid"
-AUTH_GRAFANA = ("admin", "admin")
-POSTGRES_DSN = "postgresql://demo:demo@localhost:5432/loja"
+AUTH_GRAFANA = (os.getenv("GRAFANA_USERNAME", "admin"), os.getenv("GRAFANA_PASSWORD", "admin"))
+POSTGRES_DSN = os.getenv("POSTGRES_DSN", "postgresql://demo:demo@localhost:5432/loja")
 
 
 def _prom(consulta: str) -> list:
@@ -126,6 +127,7 @@ def saude_do_pool(**_args) -> str:
 def quem_esta_segurando_locks(**_args) -> str:
     """Sessões bloqueadas no Postgres e quem as bloqueia, por nome."""
     import psycopg2
+    from contextlib import closing
     sql = """
         SELECT bloqueada.application_name,
                bloqueadora.application_name,
@@ -135,7 +137,7 @@ def quem_esta_segurando_locks(**_args) -> str:
         JOIN LATERAL unnest(pg_blocking_pids(bloqueada.pid)) AS b(pid) ON true
         JOIN pg_stat_activity bloqueadora ON bloqueadora.pid = b.pid
     """
-    with psycopg2.connect(POSTGRES_DSN, connect_timeout=5) as conexao:
+    with closing(psycopg2.connect(POSTGRES_DSN, connect_timeout=5)) as conexao:
         with conexao.cursor() as cursor:
             cursor.execute(sql)
             linhas = cursor.fetchall()

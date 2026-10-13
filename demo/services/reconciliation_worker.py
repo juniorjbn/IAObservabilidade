@@ -49,6 +49,7 @@ engine = db.criar_engine(
 async def lifespan(_app: FastAPI):
     threading.Thread(target=_laco_principal, daemon=True).start()
     yield
+    engine.dispose()
 
 
 app = FastAPI(title=NOME_SERVICO, lifespan=lifespan)
